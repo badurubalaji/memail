@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: memail-postgres-dev
+    environment:
+      POSTGRES_DB: memail
+      POSTGRES_USER: memail
+      POSTGRES_PASSWORD: password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./backend/src/main/resources/db/init:/docker-entrypoint-initdb.d
+    command: postgres -c 'max_connections=200'
+    networks:
+      - memail-network
+
+  # PgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: memail-pgadmin-dev
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@memail.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgres
+    networks:
+      - memail-network
+
+  # Apache James Email Server
+  james:
+    image: apache/james:cassandra-3.8.0
+    container_name: memail-james-dev
+    hostname: james.local
+    ports:
+      - "25:25"     # SMTP
+      - "465:465"   # SMTPS
+      - "587:587"   # SMTP with STARTTLS
+      - "143:143"   # IMAP
+      - "993:993"   # IMAPS
+      - "110:110"   # POP3
+      - "995:995"   # POP3S
+      - "8000:8000" # WebAdmin
+    environment:
+      - JAMES_CASSANDRA_REPLICATION_FACTOR=1
+    volumes:
+      - james-data:/root/conf
+      - ./james-config:/root/conf/custom
+    depends_on:
+      - cassandra
+      - elasticsearch
+    networks:
+      - memail-network
+
+  # Cassandra for James
+  cassandra:
+    image: cassandra:3.11.14
+    container_name: memail-cassandra-dev
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_CLUSTER_NAME=james
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    networks:
+      - memail-network
+
+  # Elasticsearch for James
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.8
+    container_name: memail-elasticsearch-dev
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - cluster.name=james
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - memail-network
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: memail-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - memail-network
+
+volumes:
+  postgres-data:
+  james-data:
+  cassandra-data:
+  elasticsearch-data:
+  redis-data:
+
+networks:
+  memail-network:
+    driver: bridge

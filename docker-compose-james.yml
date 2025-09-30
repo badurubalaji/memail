@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  james:
+    image: apache/james:jpa-3.8.2
+    container_name: james-server
+    ports:
+      - "9143:143"    # IMAP
+      - "9587:587"    # SMTP
+      - "9999:8000"   # WebAdmin
+    environment:
+      - "JAMES_DB_HOST=james-db"
+      - "JAMES_DB_NAME=james"
+      - "JAMES_DB_USER=james"
+      - "JAMES_DB_PASSWORD=james"
+    networks:
+      - james_james-net
+    depends_on:
+      - james-db
+
+  james-db:
+    image: postgres:15
+    container_name: james-db
+    environment:
+      - POSTGRES_DB=james
+      - POSTGRES_USER=james
+      - POSTGRES_PASSWORD=james
+    volumes:
+      - james_data:/var/lib/postgresql/data
+    networks:
+      - james_james-net
+
+volumes:
+  james_data:
+
+networks:
+  james_james-net:
+    external: true

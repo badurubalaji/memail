@@ -1,0 +1,204 @@
+// Global theme variables and styles
+
+// Light theme colors
+.light-theme {
+  --primary-color: #1976d2;
+  --primary-light: #42a5f5;
+  --primary-dark: #1565c0;
+  --accent-color: #ff4081;
+
+  --background-color: #ffffff;
+  --surface-color: #ffffff;
+  --card-background: #ffffff;
+  --sidebar-background: #f8f9fa;
+
+  --text-primary: #202124;
+  --text-secondary: #5f6368;
+  --text-disabled: #9aa0a6;
+  --text-hint: #80868b;
+
+  --border-color: #dadce0;
+  --divider-color: #e8eaed;
+  --hover-background: #f1f3f4;
+  --selected-background: #e8f0fe;
+
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-elevation: 0 2px 4px var(--shadow-color);
+
+  --success-color: #34a853;
+  --warning-color: #fbbc04;
+  --error-color: #ea4335;
+  --info-color: #4285f4;
+
+  --toolbar-background: #ffffff;
+  --notification-background: #ffffff;
+  --snackbar-background: #323232;
+  --snackbar-text: #ffffff;
+}
+
+// Dark theme colors
+.dark-theme {
+  --primary-color: #bb86fc;
+  --primary-light: #d7b4ff;
+  --primary-dark: #985eff;
+  --accent-color: #03dac6;
+
+  --background-color: #121212;
+  --surface-color: #1e1e1e;
+  --card-background: #2d2d2d;
+  --sidebar-background: #1a1a1a;
+
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-disabled: #666666;
+  --text-hint: #808080;
+
+  --border-color: #3e3e3e;
+  --divider-color: #2d2d2d;
+  --hover-background: #2d2d2d;
+  --selected-background: #3d3d3d;
+
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-elevation: 0 4px 8px var(--shadow-color);
+
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  --info-color: #2196f3;
+
+  --toolbar-background: #1e1e1e;
+  --notification-background: #2d2d2d;
+  --snackbar-background: #424242;
+  --snackbar-text: #ffffff;
+}
+
+// Global styles using theme variables
+body {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mat-toolbar {
+  background-color: var(--toolbar-background) !important;
+  color: var(--text-primary) !important;
+}
+
+.mat-card {
+  background-color: var(--card-background) !important;
+  color: var(--text-primary) !important;
+}
+
+.mat-sidenav {
+  background-color: var(--sidebar-background) !important;
+  color: var(--text-primary) !important;
+}
+
+.mat-sidenav-content {
+  background-color: var(--background-color) !important;
+}
+
+.mat-form-field {
+  color: var(--text-primary) !important;
+}
+
+.mat-form-field-label {
+  color: var(--text-secondary) !important;
+}
+
+.mat-input-element {
+  color: var(--text-primary) !important;
+}
+
+.mat-select-value {
+  color: var(--text-primary) !important;
+}
+
+.mat-option {
+  color: var(--text-primary) !important;
+}
+
+.mat-option:hover {
+  background-color: var(--hover-background) !important;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: var(--primary-color) !important;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: var(--primary-light) !important;
+}
+
+.mat-snack-bar-container {
+  background-color: var(--snackbar-background) !important;
+  color: var(--snackbar-text) !important;
+}
+
+.error-snackbar {
+  background-color: var(--error-color) !important;
+}
+
+// Custom scrollbar for dark theme
+.dark-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark-theme ::-webkit-scrollbar-track {
+  background: var(--surface-color);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 4px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary);
+}
+
+// Light theme scrollbar
+.light-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.light-theme ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.light-theme ::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.light-theme ::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+// Theme transition animations
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .light-theme {
+    --border-color: #000000;
+    --text-secondary: #000000;
+  }
+
+  .dark-theme {
+    --border-color: #ffffff;
+    --text-secondary: #ffffff;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

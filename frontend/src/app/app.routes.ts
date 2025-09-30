@@ -1,0 +1,76 @@
+import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
+
+export const routes: Routes = [
+  {
+    path: 'login',
+    loadComponent: () => import('./auth/components/login.component')
+      .then(m => m.LoginComponent)
+  },
+  {
+    path: '',
+    loadComponent: () => import('./mail/components/mail-layout.component')
+      .then(m => m.MailLayoutComponent),
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: '/inbox',
+        pathMatch: 'full'
+      },
+      {
+        path: 'inbox',
+        loadComponent: () => import('./mail/components/mail-list.component')
+          .then(m => m.MailListComponent),
+        data: { folder: 'INBOX' }
+      },
+      {
+        path: 'sent',
+        loadComponent: () => import('./mail/components/mail-list.component')
+          .then(m => m.MailListComponent),
+        data: { folder: 'SENT' }
+      },
+      {
+        path: 'drafts',
+        loadComponent: () => import('./mail/components/mail-list.component')
+          .then(m => m.MailListComponent),
+        data: { folder: 'DRAFTS' }
+      },
+      {
+        path: 'trash',
+        loadComponent: () => import('./mail/components/mail-list.component')
+          .then(m => m.MailListComponent),
+        data: { folder: 'TRASH' }
+      },
+      {
+        path: 'compose',
+        loadComponent: () => import('./mail/components/enhanced-compose.component')
+          .then(m => m.EnhancedComposeComponent)
+      },
+      {
+        path: 'inbox/:threadId',
+        loadComponent: () => import('./mail/components/mail-detail.component')
+          .then(m => m.MailDetailComponent)
+      },
+      {
+        path: 'sent/:threadId',
+        loadComponent: () => import('./mail/components/mail-detail.component')
+          .then(m => m.MailDetailComponent)
+      },
+      {
+        path: 'drafts/:threadId',
+        loadComponent: () => import('./mail/components/mail-detail.component')
+          .then(m => m.MailDetailComponent)
+      },
+      {
+        path: 'trash/:threadId',
+        loadComponent: () => import('./mail/components/mail-detail.component')
+          .then(m => m.MailDetailComponent)
+      }
+    ]
+  },
+  {
+    path: '**',
+    redirectTo: '/inbox'
+  }
+];
