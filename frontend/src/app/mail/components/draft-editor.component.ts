@@ -461,15 +461,27 @@ export class DraftEditorComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.messageId) {
+      this.snackBar.open('Cannot delete draft: Draft ID not found', 'Close', { duration: 3000 });
+      return;
+    }
+
     this.isDeleting = true;
 
-    // TODO: Implement delete draft endpoint
-    // For now, just navigate back
-    setTimeout(() => {
-      this.isDeleting = false;
-      this.snackBar.open('Draft deleted successfully!', 'Close', { duration: 3000 });
-      this.router.navigate(['/drafts']);
-    }, 1000);
+    this.mailService.deleteDraft(this.messageId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isDeleting = false;
+          this.snackBar.open('Draft deleted successfully!', 'Close', { duration: 3000 });
+          this.router.navigate(['/drafts']);
+        },
+        error: (error) => {
+          this.isDeleting = false;
+          console.error('Error deleting draft:', error);
+          this.snackBar.open('Failed to delete draft', 'Close', { duration: 3000 });
+        }
+      });
   }
 
   goBack(): void {

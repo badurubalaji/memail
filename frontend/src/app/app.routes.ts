@@ -25,6 +25,18 @@ export const routes: Routes = [
         data: { folder: 'INBOX' }
       },
       {
+        path: 'starred',
+        loadComponent: () => import('./mail/components/mail-list.component')
+          .then(m => m.MailListComponent),
+        data: { folder: 'STARRED' }
+      },
+      {
+        path: 'important',
+        loadComponent: () => import('./mail/components/mail-list.component')
+          .then(m => m.MailListComponent),
+        data: { folder: 'IMPORTANT' }
+      },
+      {
         path: 'sent',
         loadComponent: () => import('./mail/components/mail-list.component')
           .then(m => m.MailListComponent),
@@ -35,6 +47,12 @@ export const routes: Routes = [
         loadComponent: () => import('./mail/components/mail-list.component')
           .then(m => m.MailListComponent),
         data: { folder: 'DRAFTS' }
+      },
+      {
+        path: 'spam',
+        loadComponent: () => import('./mail/components/mail-list.component')
+          .then(m => m.MailListComponent),
+        data: { folder: 'SPAM' }
       },
       {
         path: 'trash',
@@ -53,12 +71,27 @@ export const routes: Routes = [
           .then(m => m.MailDetailComponent)
       },
       {
+        path: 'starred/:threadId',
+        loadComponent: () => import('./mail/components/mail-detail.component')
+          .then(m => m.MailDetailComponent)
+      },
+      {
+        path: 'important/:threadId',
+        loadComponent: () => import('./mail/components/mail-detail.component')
+          .then(m => m.MailDetailComponent)
+      },
+      {
         path: 'sent/:threadId',
         loadComponent: () => import('./mail/components/mail-detail.component')
           .then(m => m.MailDetailComponent)
       },
       {
         path: 'drafts/:threadId',
+        loadComponent: () => import('./mail/components/mail-detail.component')
+          .then(m => m.MailDetailComponent)
+      },
+      {
+        path: 'spam/:threadId',
         loadComponent: () => import('./mail/components/mail-detail.component')
           .then(m => m.MailDetailComponent)
       },

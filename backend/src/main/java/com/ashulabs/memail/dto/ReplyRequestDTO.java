@@ -26,9 +26,19 @@ public class ReplyRequestDTO {
     @NotNull(message = "Message body is required")
     private String body;
 
+    @JsonProperty("htmlContent")
+    public void setHtmlContent(String htmlContent) {
+        this.body = htmlContent; // Map htmlContent to body for backward compatibility
+    }
+
     @JsonProperty("replyToMessageId")
     @NotNull(message = "Reply to message ID is required")
     private String replyToMessageId;
+
+    @JsonProperty("originalMessageId")
+    public void setOriginalMessageId(String originalMessageId) {
+        this.replyToMessageId = originalMessageId; // Map originalMessageId to replyToMessageId
+    }
 
     @JsonProperty("type")
     @NotNull(message = "Reply type is required")

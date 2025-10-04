@@ -1,0 +1,561 @@
+
+> memail-frontend@1.0.0 test
+> ng test --watch=false --browsers=ChromeHeadless
+
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m                           [2m | [22m[1mNames[22m                                      [2m | [22m [1mRaw size[22m
+[32mchunk-RH5OAG33.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m2.29 MB[39m[2m | [22m
+[32mchunk-6RVBNUC7.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m1.81 MB[39m[2m | [22m
+[32mpolyfills.js[39m                                  [2m | [22m[2mpolyfills[22m                                  [2m | [22m  [36m1.03 MB[39m[2m | [22m
+[32mspec-mail-list.component.spec.js[39m              [2m | [22m[2mspec-mail-list.component.spec[22m              [2m | [22m[36m303.90 kB[39m[2m | [22m
+[32mchunk-7FR7JQDY.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m[36m235.33 kB[39m[2m | [22m
+[32mchunk-MTMBGIGG.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m[36m208.24 kB[39m[2m | [22m
+[32mstyles.css[39m                                    [2m | [22m[2mstyles[22m                                     [2m | [22m[36m152.96 kB[39m[2m | [22m
+[32mchunk-2NQG3YCK.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m [36m96.33 kB[39m[2m | [22m
+[32mchunk-2ZUN2HEK.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m [36m71.67 kB[39m[2m | [22m
+[32mjasmine-cleanup-1.js[39m                          [2m | [22m[2mjasmine-cleanup-1[22m                          [2m | [22m [36m67.20 kB[39m[2m | [22m
+[32mtest_main.js[39m                                  [2m | [22m[2mtest_main[22m                                  [2m | [22m [36m21.84 kB[39m[2m | [22m
+[32mspec-enhanced-compose.component.spec.js[39m       [2m | [22m[2mspec-enhanced-compose.component.spec[22m       [2m | [22m [36m16.99 kB[39m[2m | [22m
+[32mspec-mail.service.spec.js[39m                     [2m | [22m[2mspec-mail.service.spec[22m                     [2m | [22m [36m14.55 kB[39m[2m | [22m
+[32mspec-auth.service.spec.js[39m                     [2m | [22m[2mspec-auth.service.spec[22m                     [2m | [22m [36m12.73 kB[39m[2m | [22m
+[32mchunk-NMJ53NI3.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m [36m11.18 kB[39m[2m | [22m
+[32mspec-auth-error.interceptor.functional.spec.js[39m[2m | [22m[2mspec-auth-error.interceptor.functional.spec[22m[2m | [22m [36m10.59 kB[39m[2m | [22m
+[32mchunk-XVKQONNF.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m9.99 kB[39m[2m | [22m
+[32mspec-websocket.service.spec.js[39m                [2m | [22m[2mspec-websocket.service.spec[22m                [2m | [22m  [36m9.82 kB[39m[2m | [22m
+[32mchunk-FN3FUCX2.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m3.69 kB[39m[2m | [22m
+[32mchunk-6TRXNEZQ.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m3.45 kB[39m[2m | [22m
+[32mspec-app.spec.js[39m                              [2m | [22m[2mspec-app.spec[22m                              [2m | [22m  [36m1.75 kB[39m[2m | [22m
+[32mchunk-GPLQS2EY.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m[36m934 bytes[39m[2m | [22m
+[32mjasmine-cleanup-0.js[39m                          [2m | [22m[2mjasmine-cleanup-0[22m                          [2m | [22m[36m519 bytes[39m[2m | [22m
+[32mchunk-EU3KYQLM.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m[36m480 bytes[39m[2m | [22m
+
+[1m [22m                                             [2m | [22m[1mInitial total[22m                              [2m | [22m  [1m6.38 MB[22m
+
+[1mLazy chunk files[22m                              [2m | [22m[1mNames[22m                                      [2m | [22m [1mRaw size[22m
+[32mchunk-PNEWODL4.js[39m                             [2m | [22m[2mngx-quill-quill-CUw8Q_m0[22m                   [2m | [22m[36m487.23 kB[39m[2m | [22m
+
+Application bundle generation complete. [7.443 seconds] - 2025-10-04T08:41:56.298Z
+
+[32m04 10 2025 14:11:56.626:INFO [karma-server]: [39mKarma v6.4.4 server started at http://localhost:9876/
+[32m04 10 2025 14:11:56.628:INFO [launcher]: [39mLaunching browsers ChromeHeadless with concurrency unlimited
+[32m04 10 2025 14:11:56.649:INFO [launcher]: [39mStarting browser ChromeHeadless
+[32m04 10 2025 14:11:58.234:INFO [Chrome Headless 140.0.0.0 (Windows 10)]: [39mConnected on socket iMwWlkzakVJFcAI1AAAB with id 87555272
+Chrome Headless 140.0.0.0 (Windows 10): Executed 0 of 160[32m SUCCESS[39m (0 secs / 0 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 1 of 160[32m SUCCESS[39m (0 secs / 0.031 secs)
+[1A[2KERROR: [36m'Error fetching emails:', HttpErrorResponse{headers: _HttpHeaders{headers: Map{}, normalizedNames: Map{}, lazyInit: undefined, lazyUpdate: null}, status: 500, statusText: 'Server Error', url: 'http://localhost:8585/api/emails?folder=INBOX&page=0&size=50', ok: false, type: undefined, redirected: undefined, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8585/api/emails?folder=INBOX&page=0&size=50: 500 Server Error', error: 'Error'}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 1 of 160[32m SUCCESS[39m (0 secs / 0.031 secs)
+ERROR: 'Error fetching emails:', HttpErrorResponse{headers: _HttpHeaders{headers: Map{}, normalizedNames: Map{}, lazyInit: undefined, lazyUpdate: null}, status: 500, statusText: 'Server Error', url: 'http://localhost:8585/api/emails?folder=INBOX&page=0&size=50', ok: false, type: undefined, redirected: undefined, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8585/api/emails?folder=INBOX&page=0&size=50: 500 Server Error', error: 'Error'}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 2 of 160[32m SUCCESS[39m (0 secs / 0.041 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 3 of 160[32m SUCCESS[39m (0 secs / 0.046 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 4 of 160[32m SUCCESS[39m (0 secs / 0.05 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 5 of 160[32m SUCCESS[39m (0 secs / 0.055 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 6 of 160[32m SUCCESS[39m (0 secs / 0.059 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 7 of 160[32m SUCCESS[39m (0 secs / 0.063 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 8 of 160[32m SUCCESS[39m (0 secs / 0.068 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 9 of 160[32m SUCCESS[39m (0 secs / 0.077 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 10 of 160[32m SUCCESS[39m (0 secs / 0.084 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 11 of 160[32m SUCCESS[39m (0 secs / 0.088 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 12 of 160[32m SUCCESS[39m (0 secs / 0.091 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 13 of 160[32m SUCCESS[39m (0 secs / 0.096 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 14 of 160[32m SUCCESS[39m (0 secs / 0.099 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 15 of 160[32m SUCCESS[39m (0 secs / 0.102 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 16 of 160[32m SUCCESS[39m (0 secs / 0.105 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 17 of 160[32m SUCCESS[39m (0 secs / 0.108 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 18 of 160[32m SUCCESS[39m (0 secs / 0.11 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 19 of 160[32m SUCCESS[39m (0 secs / 0.113 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 20 of 160[32m SUCCESS[39m (0 secs / 0.117 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 21 of 160[32m SUCCESS[39m (0 secs / 0.12 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 22 of 160[32m SUCCESS[39m (0 secs / 0.124 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 23 of 160[32m SUCCESS[39m (0 secs / 0.129 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 24 of 160[32m SUCCESS[39m (0 secs / 0.134 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 25 of 160[32m SUCCESS[39m (0 secs / 0.142 secs)
+[1A[2KLOG: [36m'API returned 401 - token may be invalid. Consider re-authenticating.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 25 of 160[32m SUCCESS[39m (0 secs / 0.142 secs)
+LOG: 'API returned 401 - token may be invalid. Consider re-authenticating.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 26 of 160[32m SUCCESS[39m (0 secs / 0.149 secs)
+[1A[2KLOG: [36m'Network error detected - offline mode. Not logging out.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 26 of 160[32m SUCCESS[39m (0 secs / 0.149 secs)
+LOG: 'Network error detected - offline mode. Not logging out.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 27 of 160[32m SUCCESS[39m (0 secs / 0.153 secs)
+[1A[2KLOG: [36m'Network error detected - offline mode. Not logging out.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 27 of 160[32m SUCCESS[39m (0 secs / 0.153 secs)
+LOG: 'Network error detected - offline mode. Not logging out.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 28 of 160[32m SUCCESS[39m (0 secs / 0.16 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (401): Authentication failed. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 28 of 160[32m SUCCESS[39m (0 secs / 0.16 secs)
+LOG: 'Critical authentication error detected (401): Authentication failed. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 29 of 160[32m SUCCESS[39m (0 secs / 0.166 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (500): User not authenticated. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 29 of 160[32m SUCCESS[39m (0 secs / 0.166 secs)
+LOG: 'Critical authentication error detected (500): User not authenticated. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 30 of 160[32m SUCCESS[39m (0 secs / 0.169 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (401): Authentication failed. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 30 of 160[32m SUCCESS[39m (0 secs / 0.169 secs)
+LOG: 'Critical authentication error detected (401): Authentication failed. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 31 of 160[32m SUCCESS[39m (0 secs / 0.172 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 32 of 160[32m SUCCESS[39m (0 secs / 0.175 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 33 of 160[32m SUCCESS[39m (0 secs / 0.178 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 34 of 160[32m SUCCESS[39m (0 secs / 0.181 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 35 of 160[32m SUCCESS[39m (0 secs / 0.184 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 36 of 160[32m SUCCESS[39m (0 secs / 0.189 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 37 of 160[32m SUCCESS[39m (0 secs / 0.193 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 38 of 160[32m SUCCESS[39m (0 secs / 0.198 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (401): Authentication failed. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 38 of 160[32m SUCCESS[39m (0 secs / 0.198 secs)
+LOG: 'Critical authentication error detected (401): Authentication failed. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 39 of 160[32m SUCCESS[39m (0 secs / 0.202 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (401): Custom authentication error. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 39 of 160[32m SUCCESS[39m (0 secs / 0.202 secs)
+LOG: 'Critical authentication error detected (401): Custom authentication error. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 40 of 160[32m SUCCESS[39m (0 secs / 0.206 secs)
+[1A[2KLOG: [36m'Mail list received notification:', Object{type: 'NEW_EMAIL', folder: 'SENT', messageId: 'new-msg'}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 40 of 160[32m SUCCESS[39m (0 secs / 0.206 secs)
+LOG: 'Mail list received notification:', Object{type: 'NEW_EMAIL', folder: 'SENT', messageId: 'new-msg'}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 41 of 160[32m SUCCESS[39m (0 secs / 0.453 secs)
+[1A[2KLOG: [36m'Mail list received notification:', Object{type: 'NEW_EMAIL', folder: 'INBOX', messageId: 'new-msg'}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 41 of 160[32m SUCCESS[39m (0 secs / 0.453 secs)
+LOG: 'Mail list received notification:', Object{type: 'NEW_EMAIL', folder: 'INBOX', messageId: 'new-msg'}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 42 of 160[32m SUCCESS[39m (0 secs / 0.482 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 43 of 160[32m SUCCESS[39m (0 secs / 0.489 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 44 of 160[32m SUCCESS[39m (0 secs / 0.496 secs)
+[1A[2KERROR: [36m'Error loading conversations:', Object{status: 500, error: Object{message: 'Server error'}}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 44 of 160[32m SUCCESS[39m (0 secs / 0.496 secs)
+ERROR: 'Error loading conversations:', Object{status: 500, error: Object{message: 'Server error'}}
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) MailListComponent loadConversations() should handle error when loading conversations FAILED[39m
+	Expected spy MatSnackBar.open to have been called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/mail-list.component.spec.ts:157:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 45 of 160[31m (1 FAILED)[39m (0 secs / 0.53 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 46 of 160[31m (1 FAILED)[39m (0 secs / 0.537 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 47 of 160[31m (1 FAILED)[39m (0 secs / 0.544 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 48 of 160[31m (1 FAILED)[39m (0 secs / 0.551 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 49 of 160[31m (1 FAILED)[39m (0 secs / 0.564 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 50 of 160[31m (1 FAILED)[39m (0 secs / 0.61 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 51 of 160[31m (1 FAILED)[39m (0 secs / 0.645 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 52 of 160[31m (1 FAILED)[39m (0 secs / 0.674 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 53 of 160[31m (1 FAILED)[39m (0 secs / 0.699 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 54 of 160[31m (1 FAILED)[39m (0 secs / 0.736 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 55 of 160[31m (1 FAILED)[39m (0 secs / 0.764 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 56 of 160[31m (1 FAILED)[39m (0 secs / 0.8 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 57 of 160[31m (1 FAILED)[39m (0 secs / 0.808 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 58 of 160[31m (1 FAILED)[39m (0 secs / 0.837 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 59 of 160[31m (1 FAILED)[39m (0 secs / 0.866 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 60 of 160[31m (1 FAILED)[39m (0 secs / 0.894 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 61 of 160[31m (1 FAILED)[39m (0 secs / 0.92 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 62 of 160[31m (1 FAILED)[39m (0 secs / 0.941 secs)
+[1A[2KLOG: [36m'Draft data loaded:', Object{messageId: 'draft-1'}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 62 of 160[31m (1 FAILED)[39m (0 secs / 0.941 secs)
+LOG: 'Draft data loaded:', Object{messageId: 'draft-1'}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 63 of 160[31m (1 FAILED)[39m (0 secs / 0.964 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 64 of 160[31m (1 FAILED)[39m (0 secs / 0.986 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 65 of 160[31m (1 FAILED)[39m (0 secs / 1.004 secs)
+[1A[2KLOG: [36m'Email starred successfully'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 65 of 160[31m (1 FAILED)[39m (0 secs / 1.004 secs)
+LOG: 'Email starred successfully'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 66 of 160[31m (1 FAILED)[39m (0 secs / 1.026 secs)
+[1A[2KLOG: [36m'Email unstarred successfully'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 66 of 160[31m (1 FAILED)[39m (0 secs / 1.026 secs)
+LOG: 'Email unstarred successfully'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 67 of 160[31m (1 FAILED)[39m (0 secs / 1.051 secs)
+[1A[2KERROR: [36m'Error toggling star:', Error: Star failed
+Error: Star failed
+    at http://localhost:9876/base/src/app/mail/components/mail-list.component.spec.ts:312:63
+    at _Observable.init [as _subscribe] (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at _Observable._trySubscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at _Observable.subscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:22:9)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/operators/takeUntil.js:8:38
+    at SafeSubscriber.<anonymous> (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 67 of 160[31m (1 FAILED)[39m (0 secs / 1.051 secs)
+ERROR: 'Error toggling star:', Error: Star failed
+Error: Star failed
+    at http://localhost:9876/base/src/app/mail/components/mail-list.component.spec.ts:312:63
+    at _Observable.init [as _subscribe] (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at _Observable._trySubscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at _Observable.subscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:22:9)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/operators/takeUntil.js:8:38
+    at SafeSubscriber.<anonymous> (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) MailListComponent Star Functionality should revert star state on error FAILED[39m
+	Expected true to be false.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/mail-list.component.spec.ts:317:38)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Failed to update star status', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/mail-list.component.spec.ts:318:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 68 of 160[31m (2 FAILED)[39m (0 secs / 1.685 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 68 of 160[31m (2 FAILED)[39m (0 secs / 1.685 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 68 of 160[31m (2 FAILED)[39m (0 secs / 1.685 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 69 of 160[31m (2 FAILED)[39m (0 secs / 1.689 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 69 of 160[31m (2 FAILED)[39m (0 secs / 1.689 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 69 of 160[31m (2 FAILED)[39m (0 secs / 1.689 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 70 of 160[31m (2 FAILED)[39m (0 secs / 1.693 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 70 of 160[31m (2 FAILED)[39m (0 secs / 1.693 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 71 of 160[31m (2 FAILED)[39m (0 secs / 1.696 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 71 of 160[31m (2 FAILED)[39m (0 secs / 1.696 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KLOG: [36m'Auth initialized with stored token'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 71 of 160[31m (2 FAILED)[39m (0 secs / 1.696 secs)
+LOG: 'Auth initialized with stored token'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 72 of 160[31m (2 FAILED)[39m (0 secs / 1.7 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 72 of 160[31m (2 FAILED)[39m (0 secs / 1.7 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 73 of 160[31m (2 FAILED)[39m (0 secs / 1.703 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 73 of 160[31m (2 FAILED)[39m (0 secs / 1.703 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 74 of 160[31m (2 FAILED)[39m (0 secs / 1.705 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 74 of 160[31m (2 FAILED)[39m (0 secs / 1.705 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 75 of 160[31m (2 FAILED)[39m (0 secs / 1.707 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 75 of 160[31m (2 FAILED)[39m (0 secs / 1.707 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 76 of 160[31m (2 FAILED)[39m (0 secs / 1.711 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 76 of 160[31m (2 FAILED)[39m (0 secs / 1.711 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 77 of 160[31m (2 FAILED)[39m (0 secs / 1.714 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 77 of 160[31m (2 FAILED)[39m (0 secs / 1.714 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KERROR: [36m'Login error:', HttpErrorResponse{headers: _HttpHeaders{headers: Map{}, normalizedNames: Map{}, lazyInit: undefined, lazyUpdate: null}, status: 401, statusText: 'Unauthorized', url: 'http://localhost:8585/api/auth/login', ok: false, type: undefined, redirected: undefined, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8585/api/auth/login: 401 Unauthorized', error: 'Unauthorized'}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 77 of 160[31m (2 FAILED)[39m (0 secs / 1.714 secs)
+ERROR: 'Login error:', HttpErrorResponse{headers: _HttpHeaders{headers: Map{}, normalizedNames: Map{}, lazyInit: undefined, lazyUpdate: null}, status: 401, statusText: 'Unauthorized', url: 'http://localhost:8585/api/auth/login', ok: false, type: undefined, redirected: undefined, name: 'HttpErrorResponse', message: 'Http failure response for http://localhost:8585/api/auth/login: 401 Unauthorized', error: 'Unauthorized'}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 78 of 160[31m (2 FAILED)[39m (0 secs / 1.716 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 78 of 160[31m (2 FAILED)[39m (0 secs / 1.716 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 79 of 160[31m (2 FAILED)[39m (0 secs / 1.72 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 79 of 160[31m (2 FAILED)[39m (0 secs / 1.72 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 80 of 160[31m (2 FAILED)[39m (0 secs / 1.726 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 80 of 160[31m (2 FAILED)[39m (0 secs / 1.726 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 81 of 160[31m (2 FAILED)[39m (0 secs / 1.728 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 81 of 160[31m (2 FAILED)[39m (0 secs / 1.728 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 82 of 160[31m (2 FAILED)[39m (0 secs / 1.731 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 82 of 160[31m (2 FAILED)[39m (0 secs / 1.731 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KLOG: [36m'Force logout triggered - clearing local auth data and redirecting'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 82 of 160[31m (2 FAILED)[39m (0 secs / 1.731 secs)
+LOG: 'Force logout triggered - clearing local auth data and redirecting'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 83 of 160[31m (2 FAILED)[39m (0 secs / 1.732 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 83 of 160[31m (2 FAILED)[39m (0 secs / 1.732 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 84 of 160[31m (2 FAILED)[39m (0 secs / 1.733 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 84 of 160[31m (2 FAILED)[39m (0 secs / 1.733 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 85 of 160[31m (2 FAILED)[39m (0 secs / 1.737 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 85 of 160[31m (2 FAILED)[39m (0 secs / 1.737 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 86 of 160[31m (2 FAILED)[39m (0 secs / 1.739 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 86 of 160[31m (2 FAILED)[39m (0 secs / 1.739 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 87 of 160[31m (2 FAILED)[39m (0 secs / 1.764 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 87 of 160[31m (2 FAILED)[39m (0 secs / 1.764 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 88 of 160[31m (2 FAILED)[39m (0 secs / 1.767 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 88 of 160[31m (2 FAILED)[39m (0 secs / 1.767 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 89 of 160[31m (2 FAILED)[39m (0 secs / 1.772 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 89 of 160[31m (2 FAILED)[39m (0 secs / 1.772 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 90 of 160[31m (2 FAILED)[39m (0 secs / 1.777 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 90 of 160[31m (2 FAILED)[39m (0 secs / 1.777 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 91 of 160[31m (2 FAILED)[39m (0 secs / 1.779 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 91 of 160[31m (2 FAILED)[39m (0 secs / 1.779 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 92 of 160[31m (2 FAILED)[39m (0 secs / 1.782 secs)
+[1A[2KLOG: [36m'No valid auth token found - user will need to login'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 92 of 160[31m (2 FAILED)[39m (0 secs / 1.782 secs)
+LOG: 'No valid auth token found - user will need to login'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 93 of 160[31m (2 FAILED)[39m (0 secs / 1.784 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 94 of 160[31m (2 FAILED)[39m (0 secs / 1.878 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 95 of 160[31m (2 FAILED)[39m (0 secs / 1.906 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 96 of 160[31m (2 FAILED)[39m (0 secs / 1.952 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 97 of 160[31m (2 FAILED)[39m (0 secs / 1.971 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 98 of 160[31m (2 FAILED)[39m (0 secs / 2 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 99 of 160[31m (2 FAILED)[39m (0 secs / 2.026 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 100 of 160[31m (2 FAILED)[39m (0 secs / 2.045 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 101 of 160[31m (2 FAILED)[39m (0 secs / 2.065 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 102 of 160[31m (2 FAILED)[39m (0 secs / 2.088 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 103 of 160[31m (2 FAILED)[39m (0 secs / 2.111 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 104 of 160[31m (2 FAILED)[39m (0 secs / 2.136 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 105 of 160[31m (2 FAILED)[39m (0 secs / 2.166 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 106 of 160[31m (2 FAILED)[39m (0 secs / 2.184 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 107 of 160[31m (2 FAILED)[39m (0 secs / 2.2 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 108 of 160[31m (2 FAILED)[39m (0 secs / 2.22 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 109 of 160[31m (2 FAILED)[39m (0 secs / 2.231 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 110 of 160[31m (2 FAILED)[39m (0 secs / 2.246 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 111 of 160[31m (2 FAILED)[39m (0 secs / 2.256 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 112 of 160[31m (2 FAILED)[39m (0 secs / 2.267 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 113 of 160[31m (2 FAILED)[39m (0 secs / 2.288 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 114 of 160[31m (2 FAILED)[39m (0 secs / 2.312 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 115 of 160[31m (2 FAILED)[39m (0 secs / 2.332 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Content Editing should prompt for link insertion FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Link inserted', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:431:29)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 116 of 160[31m (3 FAILED)[39m (0 secs / 2.353 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 117 of 160[31m (3 FAILED)[39m (0 secs / 2.38 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Send Email should send email successfully FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Email sent successfully!', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:202:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 118 of 160[31m (4 FAILED)[39m (0 secs / 2.402 secs)
+[1A[2KLOG: [36m'Draft deleted after sending:', 'draft-123'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 118 of 160[31m (4 FAILED)[39m (0 secs / 2.402 secs)
+LOG: 'Draft deleted after sending:', 'draft-123'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 119 of 160[31m (4 FAILED)[39m (0 secs / 2.429 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Send Email should not send email without valid recipients FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Please add at least one valid recipient', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:212:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 120 of 160[31m (5 FAILED)[39m (0 secs / 2.472 secs)
+[1A[2KERROR: [36m'Error sending email:', Error: Send failed
+Error: Send failed
+    at http://localhost:9876/base/src/app/mail/components/enhanced-compose.component.spec.ts:220:62
+    at _Observable.init [as _subscribe] (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at _Observable._trySubscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at _Observable.subscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:22:9)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:76:18
+    at new ZoneAwarePromise (http://localhost:9876/base/node_modules/zone.js/fesm2015/zone.js:2701:25)
+    at _Observable.toPromise (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:74:16)
+    at EnhancedComposeComponent2.<anonymous> (http://localhost:9876/base/src/app/mail/components/enhanced-compose.component.ts:1144:51)[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 120 of 160[31m (5 FAILED)[39m (0 secs / 2.472 secs)
+ERROR: 'Error sending email:', Error: Send failed
+Error: Send failed
+    at http://localhost:9876/base/src/app/mail/components/enhanced-compose.component.spec.ts:220:62
+    at _Observable.init [as _subscribe] (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at _Observable._trySubscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at _Observable.subscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:22:9)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:76:18
+    at new ZoneAwarePromise (http://localhost:9876/base/node_modules/zone.js/fesm2015/zone.js:2701:25)
+    at _Observable.toPromise (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:74:16)
+    at EnhancedComposeComponent2.<anonymous> (http://localhost:9876/base/src/app/mail/components/enhanced-compose.component.ts:1144:51)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Send Email should handle send email error FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Failed to send email', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:225:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 121 of 160[31m (6 FAILED)[39m (0 secs / 2.902 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Draft Management should update existing draft FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Draft updated successfully', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:292:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 122 of 160[31m (7 FAILED)[39m (0 secs / 2.926 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Draft Management should save new draft FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Draft saved successfully', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:274:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 123 of 160[31m (8 FAILED)[39m (0 secs / 2.957 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Draft Management should not save draft with no content FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Nothing to save', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:304:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 124 of 160[31m (9 FAILED)[39m (0 secs / 2.983 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Draft Management should auto-save draft after content changes FAILED[39m
+	Expected '' to contain 'saved'.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:322:40)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 125 of 160[31m (10 FAILED)[39m (0 secs / 3.008 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 126 of 160[31m (10 FAILED)[39m (0 secs / 3.04 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 127 of 160[31m (10 FAILED)[39m (0 secs / 3.055 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 128 of 160[31m (10 FAILED)[39m (0 secs / 3.071 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 129 of 160[31m (10 FAILED)[39m (0 secs / 3.092 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 130 of 160[31m (10 FAILED)[39m (0 secs / 3.121 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 131 of 160[31m (10 FAILED)[39m (0 secs / 3.136 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 132 of 160[31m (10 FAILED)[39m (0 secs / 3.142 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 133 of 160[31m (10 FAILED)[39m (0 secs / 3.145 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 134 of 160[31m (10 FAILED)[39m (0 secs / 3.147 secs)
+[1A[2KLOG: [36m'STOMP Debug: ', 'Already INACTIVE, nothing more to do'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 134 of 160[31m (10 FAILED)[39m (0 secs / 3.147 secs)
+LOG: 'STOMP Debug: ', 'Already INACTIVE, nothing more to do'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 135 of 160[31m (10 FAILED)[39m (0 secs / 3.149 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 136 of 160[31m (10 FAILED)[39m (0 secs / 3.15 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 137 of 160[31m (10 FAILED)[39m (0 secs / 3.152 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 138 of 160[31m (10 FAILED)[39m (0 secs / 3.154 secs)
+[1A[2KLOG: [36m'📬 Subscribing to notifications for user: test@example.com'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 138 of 160[31m (10 FAILED)[39m (0 secs / 3.154 secs)
+LOG: '📬 Subscribing to notifications for user: test@example.com'
+[1A[2KLOG: [36m'✅ Successfully subscribed to /user/queue/notifications'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 138 of 160[31m (10 FAILED)[39m (0 secs / 3.154 secs)
+LOG: '✅ Successfully subscribed to /user/queue/notifications'
+[1A[2KLOG: [36m'📧 Received notification:', Object{type: 'NEW_EMAIL', messageId: 'msg-123', from: 'sender@example.com', subject: 'Test', timestamp: 1759567323510}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 138 of 160[31m (10 FAILED)[39m (0 secs / 3.154 secs)
+LOG: '📧 Received notification:', Object{type: 'NEW_EMAIL', messageId: 'msg-123', from: 'sender@example.com', subject: 'Test', timestamp: 1759567323510}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 139 of 160[31m (10 FAILED)[39m (0 secs / 3.157 secs)
+[1A[2KERROR: [36m'Cannot subscribe: userEmail is null'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 139 of 160[31m (10 FAILED)[39m (0 secs / 3.157 secs)
+ERROR: 'Cannot subscribe: userEmail is null'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 140 of 160[31m (10 FAILED)[39m (0 secs / 3.158 secs)
+[1A[2KLOG: [36m'📬 Subscribing to notifications for user: test@example.com'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 140 of 160[31m (10 FAILED)[39m (0 secs / 3.158 secs)
+LOG: '📬 Subscribing to notifications for user: test@example.com'
+[1A[2KLOG: [36m'✅ Successfully subscribed to /user/queue/notifications'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 140 of 160[31m (10 FAILED)[39m (0 secs / 3.158 secs)
+LOG: '✅ Successfully subscribed to /user/queue/notifications'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 141 of 160[31m (10 FAILED)[39m (0 secs / 3.178 secs)
+[1A[2KLOG: [36m'✅ WebSocket STOMP connected successfully'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 141 of 160[31m (10 FAILED)[39m (0 secs / 3.178 secs)
+LOG: '✅ WebSocket STOMP connected successfully'
+[1A[2KERROR: [36m'Cannot subscribe: userEmail is null'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 141 of 160[31m (10 FAILED)[39m (0 secs / 3.178 secs)
+ERROR: 'Cannot subscribe: userEmail is null'
+[1A[2KLOG: [36m'STOMP Debug: ', 'Already INACTIVE, nothing more to do'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 141 of 160[31m (10 FAILED)[39m (0 secs / 3.178 secs)
+LOG: 'STOMP Debug: ', 'Already INACTIVE, nothing more to do'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 142 of 160[31m (10 FAILED)[39m (0 secs / 3.18 secs)
+[1A[2KLOG: [36m'✅ WebSocket STOMP connected successfully'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 142 of 160[31m (10 FAILED)[39m (0 secs / 3.18 secs)
+LOG: '✅ WebSocket STOMP connected successfully'
+[1A[2KERROR: [36m'Cannot subscribe: userEmail is null'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 142 of 160[31m (10 FAILED)[39m (0 secs / 3.18 secs)
+ERROR: 'Cannot subscribe: userEmail is null'
+[1A[2KLOG: [36m'STOMP Debug: ', 'Already INACTIVE, nothing more to do'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 142 of 160[31m (10 FAILED)[39m (0 secs / 3.18 secs)
+LOG: 'STOMP Debug: ', 'Already INACTIVE, nothing more to do'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 143 of 160[31m (10 FAILED)[39m (0 secs / 3.182 secs)
+[1A[2KLOG: [36m'⚠️ WebSocket disconnected'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 143 of 160[31m (10 FAILED)[39m (0 secs / 3.182 secs)
+LOG: '⚠️ WebSocket disconnected'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 144 of 160[31m (10 FAILED)[39m (0 secs / 3.184 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 145 of 160[31m (10 FAILED)[39m (0 secs / 3.185 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 146 of 160[31m (10 FAILED)[39m (0 secs / 3.187 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 147 of 160[31m (10 FAILED)[39m (0 secs / 3.189 secs)
+[1A[2KLOG: [36m'Attempting to reconnect (1/10)...'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 147 of 160[31m (10 FAILED)[39m (0 secs / 3.189 secs)
+LOG: 'Attempting to reconnect (1/10)...'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 148 of 160[31m (10 FAILED)[39m (0 secs / 3.192 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 149 of 160[31m (10 FAILED)[39m (0 secs / 3.194 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 150 of 160[31m (10 FAILED)[39m (0 secs / 3.198 secs)
+[1A[2KLOG: [36m'WebSocket already connected or connecting'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 150 of 160[31m (10 FAILED)[39m (0 secs / 3.198 secs)
+LOG: 'WebSocket already connected or connecting'
+[1A[2KLOG: [36m'STOMP Debug: ', 'Already INACTIVE, nothing more to do'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 150 of 160[31m (10 FAILED)[39m (0 secs / 3.198 secs)
+LOG: 'STOMP Debug: ', 'Already INACTIVE, nothing more to do'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 151 of 160[31m (10 FAILED)[39m (0 secs / 3.202 secs)
+[1A[2KLOG: [36m'WebSocket already connected or connecting'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 151 of 160[31m (10 FAILED)[39m (0 secs / 3.202 secs)
+LOG: 'WebSocket already connected or connecting'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 152 of 160[31m (10 FAILED)[39m (0 secs / 3.207 secs)
+[1A[2KLOG: [36m'🔌 Connecting WebSocket for user: test@example.com'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 152 of 160[31m (10 FAILED)[39m (0 secs / 3.207 secs)
+LOG: '🔌 Connecting WebSocket for user: test@example.com'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 153 of 160[31m (10 FAILED)[39m (0 secs / 3.21 secs)
+[1A[2KLOG: [36m'STOMP Debug: ', 'Opening Web Socket...'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 153 of 160[31m (10 FAILED)[39m (0 secs / 3.21 secs)
+LOG: 'STOMP Debug: ', 'Opening Web Socket...'
+[1A[2KLOG: [36m'🔌 Connecting WebSocket for user: test@example.com'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 153 of 160[31m (10 FAILED)[39m (0 secs / 3.21 secs)
+LOG: '🔌 Connecting WebSocket for user: test@example.com'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 154 of 160[31m (10 FAILED)[39m (0 secs / 3.212 secs)
+[1A[2KLOG: [36m'STOMP Debug: ', 'Opening Web Socket...'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 154 of 160[31m (10 FAILED)[39m (0 secs / 3.212 secs)
+LOG: 'STOMP Debug: ', 'Opening Web Socket...'
+[1A[2KLOG: [36m'🔌 Connecting WebSocket for user: test@example.com'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 154 of 160[31m (10 FAILED)[39m (0 secs / 3.212 secs)
+LOG: '🔌 Connecting WebSocket for user: test@example.com'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 155 of 160[31m (10 FAILED)[39m (0 secs / 3.214 secs)
+[1A[2KLOG: [36m'⚠️ WebSocket connection closed'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 155 of 160[31m (10 FAILED)[39m (0 secs / 3.214 secs)
+LOG: '⚠️ WebSocket connection closed'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 156 of 160[31m (10 FAILED)[39m (0 secs / 3.216 secs)
+[1A[2KERROR: [36m'❌ STOMP Error: ', Object{}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 156 of 160[31m (10 FAILED)[39m (0 secs / 3.216 secs)
+ERROR: '❌ STOMP Error: ', Object{}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 157 of 160[31m (10 FAILED)[39m (0 secs / 3.217 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 158 of 160[31m (10 FAILED)[39m (0 secs / 3.218 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 159 of 160[31m (10 FAILED)[39m (0 secs / 3.219 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 160 of 160[31m (10 FAILED)[39m (0 secs / 3.221 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 160 of 160[31m (10 FAILED)[39m (3.575 secs / 3.221 secs)
+[31mTOTAL: 10 FAILED, 150 SUCCESS[39m

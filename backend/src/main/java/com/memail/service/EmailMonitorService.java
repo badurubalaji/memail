@@ -1,5 +1,6 @@
 package com.memail.service;
 
+import com.memail.config.WebSocketConfig;
 import com.memail.dto.EmailHeaderDTO;
 import jakarta.mail.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,22 @@ public class EmailMonitorService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private WebSocketConfig webSocketConfig;
+
     // Track last known message counts per user
     private final Map<String, Integer> lastMessageCounts = new ConcurrentHashMap<>();
 
-    @Scheduled(fixedDelay = 30000) // Check every 30 seconds
+    @Scheduled(fixedDelay = 10000) // Check every 10 seconds for more responsive updates
     public void monitorNewEmails() {
         try {
-            // Get all connected users (in a real app, you'd get this from active sessions)
-            // For now, we'll use a hardcoded list
-            List<String> activeUsers = Arrays.asList("admin@ashulabs.com", "admin@pos-saas.com");
+            // Get all actively connected users from WebSocket configuration
+            Set<String> activeUsers = webSocketConfig.getActiveUsers();
+
+            if (activeUsers.isEmpty()) {
+                // No active users, no need to monitor
+                return;
+            }
 
             for (String userEmail : activeUsers) {
                 checkForNewEmails(userEmail);

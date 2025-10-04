@@ -112,6 +112,15 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
 
       <!-- Messages Container -->
       <div *ngIf="conversation && conversation.messages" class="messages-container">
+        <!-- Inline Reply (Shown at top when active) -->
+        <app-inline-reply
+          *ngIf="showInlineReply && currentReplyData"
+          [replyData]="currentReplyData"
+          (sendReply)="handleSendReply($event)"
+          (cancel)="hideInlineReply()"
+          (saveDraftEvent)="handleSaveDraft($event)">
+        </app-inline-reply>
+
         <!-- Collapsed Messages Indicator -->
         <div *ngIf="hasCollapsedMessages()" class="collapsed-messages-bar">
           <button mat-button class="expand-all-button" (click)="expandAllMessages()">
@@ -233,15 +242,6 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
             </div>
           </div>
         </div>
-
-        <!-- Inline Reply -->
-        <app-inline-reply
-          *ngIf="showInlineReply && currentReplyData"
-          [replyData]="currentReplyData"
-          (sendReply)="handleSendReply($event)"
-          (cancel)="hideInlineReply()"
-          (saveDraftEvent)="handleSaveDraft($event)">
-        </app-inline-reply>
       </div>
 
       <!-- Action Menus -->
@@ -289,67 +289,74 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
       display: flex;
       flex-direction: column;
       background: #ffffff;
+      overflow: hidden;
+      box-sizing: border-box;
     }
 
     /* Conversation Header */
     .conversation-header {
-      border-bottom: 1px solid #dadce0;
       background: #ffffff;
-      padding: 12px 24px;
+      padding: 8px 16px;
       flex-shrink: 0;
       box-sizing: border-box;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .header-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       min-height: 48px;
     }
 
     .back-button {
-      margin-right: 16px;
       color: #5f6368;
-      width: 48px;
-      height: 48px;
-      min-width: 48px;
-      min-height: 48px;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
       padding: 0;
-      margin-right: 16px;
+      margin-right: 8px;
       border: none;
       background: transparent;
       overflow: visible;
+      transition: background-color 0.2s ease;
+      flex-shrink: 0;
     }
 
     .back-button mat-icon {
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
     }
 
     .back-button:hover {
-      background-color: rgba(95, 99, 104, 0.1);
+      background-color: rgba(95, 99, 104, 0.15);
+      cursor: pointer;
     }
 
     .conversation-actions {
       display: flex;
-      gap: 8px;
+      gap: 4px;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
     }
 
     .conversation-actions button {
       color: #5f6368;
-      width: 48px;
-      height: 48px;
-      min-width: 48px;
-      min-height: 48px;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -359,24 +366,29 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
       border: none;
       background: transparent;
       overflow: visible;
+      transition: background-color 0.2s ease;
+      flex-shrink: 0;
     }
 
     .conversation-actions button mat-icon {
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .conversation-actions button:hover {
-      background-color: rgba(95, 99, 104, 0.1);
+      background-color: rgba(95, 99, 104, 0.15);
+      cursor: pointer;
     }
 
     .header-info {
-      padding-left: 56px;
+      padding-left: 48px;
+      padding-bottom: 0;
+      margin-bottom: 0;
     }
 
     .conversation-subject {
@@ -395,8 +407,10 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
     /* Messages Container */
     .messages-container {
       flex: 1;
-      overflow: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
       background: #ffffff;
+      box-sizing: border-box;
     }
 
     .collapsed-messages-bar {
@@ -411,9 +425,10 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
     }
 
     .message-thread {
-      max-width: 700px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 16px 24px;
+      box-sizing: border-box;
     }
 
     .message-item {
@@ -491,6 +506,8 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
       border-radius: 8px;
       background: #ffffff;
       overflow: hidden;
+      box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 1px 3px 1px rgba(60, 64, 67, 0.08);
+      margin-bottom: 12px;
     }
 
     .message-header {
@@ -592,7 +609,7 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
 
     /* Recipients Section */
     .recipients-section {
-      padding: 8px 16px;
+      padding: 12px 16px;
       background: #f8f9fa;
       border-bottom: 1px solid #e8eaed;
     }
@@ -602,17 +619,20 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
       align-items: center;
       gap: 8px;
       font-size: 13px;
+      margin-bottom: 4px;
     }
 
     .to-label, .cc-label, .bcc-label {
       color: #5f6368;
       font-weight: 500;
-      min-width: 20px;
+      min-width: 30px;
+      text-transform: lowercase;
     }
 
     .recipients-list, .cc-list, .bcc-list {
       color: #202124;
       flex: 1;
+      word-break: break-word;
     }
 
     .show-details-btn {
@@ -635,73 +655,165 @@ import { EnhancedComposeComponent } from './enhanced-compose.component';
     }
 
     .cc-row {
-      background-color: rgba(26, 115, 232, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      margin-top: 4px;
       padding: 4px 8px;
+      background-color: rgba(26, 115, 232, 0.08);
       border-radius: 4px;
+      border-left: 3px solid #1a73e8;
     }
 
     .bcc-row {
-      background-color: rgba(219, 68, 55, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      margin-top: 4px;
       padding: 4px 8px;
+      background-color: rgba(219, 68, 55, 0.08);
       border-radius: 4px;
+      border-left: 3px solid #db4437;
     }
 
     /* Message Body */
     .message-body {
       padding: 16px;
+      min-height: 100px;
     }
 
     .message-content {
-      line-height: 1.5;
+      line-height: 1.6;
       color: #202124;
       font-size: 14px;
       word-wrap: break-word;
-      min-height: 60px;
-      padding: 16px;
-      border: 1px solid #e8eaed;
-      border-radius: 8px;
-      background-color: #fafafa;
-      margin: 8px 0;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      padding: 0;
+      margin: 0;
     }
 
     .message-content img {
       max-width: 100%;
       height: auto;
+      display: block;
+      margin: 12px 0;
     }
 
     .message-content p {
+      margin: 0 0 12px 0;
+      line-height: 1.6;
+    }
+
+    .message-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .message-content a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+
+    .message-content a:hover {
+      text-decoration: underline;
+    }
+
+    .message-content blockquote {
+      margin: 12px 0;
+      padding: 8px 16px;
+      border-left: 3px solid #e8eaed;
+      background: #f8f9fa;
+      color: #5f6368;
+    }
+
+    .message-content pre {
+      background: #f8f9fa;
+      border: 1px solid #e8eaed;
+      border-radius: 4px;
+      padding: 12px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .message-content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 12px 0;
+    }
+
+    .message-content table td,
+    .message-content table th {
+      border: 1px solid #e8eaed;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .message-content table th {
+      background: #f8f9fa;
+      font-weight: 500;
+    }
+
+    .message-content ul,
+    .message-content ol {
       margin: 8px 0;
+      padding-left: 24px;
+    }
+
+    .message-content li {
+      margin: 4px 0;
     }
 
     .message-content:empty::before {
-      content: '(No message content)';
+      content: 'No message content';
       color: #5f6368;
       font-style: italic;
     }
 
     /* Message Actions */
     .message-actions-bar {
-      padding: 8px 16px;
-      border-top: 1px solid #e8eaed;
+      padding: 12px 16px;
+      border-top: 1px solid #f0f0f0;
       display: flex;
-      gap: 8px;
+      gap: 12px;
       align-items: center;
+      background: #fafafa;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
     }
 
     .reply-button, .reply-all-button, .forward-button {
-      color: #5f6368;
+      color: #202124;
       font-size: 13px;
-      display: flex;
+      font-weight: 500;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       height: 36px;
-      padding: 0 12px;
+      padding: 0 16px;
+      border-radius: 18px;
+      background: transparent;
+      border: 1px solid #dadce0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: none;
+      letter-spacing: 0.25px;
+      line-height: 36px;
+    }
+
+    .reply-button:hover, .reply-all-button:hover, .forward-button:hover {
+      background-color: rgba(26, 115, 232, 0.04);
+      border-color: #c6c6c6;
+      box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
     }
 
     .reply-button mat-icon, .reply-all-button mat-icon, .forward-button mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #5f6368;
     }
 
     .attachment-icon {
@@ -835,9 +947,14 @@ export class MailDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (conversation: ConversationDTO) => {
+          // Reverse messages to show latest first
+          if (conversation.messages) {
+            conversation.messages = conversation.messages.reverse();
+          }
           this.conversation = conversation;
           this.initializeThreadView();
-          this.markUnreadMessagesAsRead();
+          // Don't automatically mark as read - let users manually mark if desired
+          // this.markUnreadMessagesAsRead();
           this.isLoading = false;
         },
         error: (error) => {
@@ -1055,8 +1172,8 @@ export class MailDetailComponent implements OnInit, OnDestroy {
   private initializeThreadView(): void {
     if (!this.conversation?.messages) return;
 
-    // Initialize message details array
-    this.showMessageDetails = new Array(this.conversation.messages.length).fill(true);
+    // Initialize message details array - false by default (collapsed details)
+    this.showMessageDetails = new Array(this.conversation.messages.length).fill(false);
 
     // By default, expand ALL messages to ensure content is visible
     for (let i = 0; i < this.conversation.messages.length; i++) {
@@ -1157,81 +1274,104 @@ export class MailDetailComponent implements OnInit, OnDestroy {
   }
 
   getMessageContent(message: EmailDetailDTO): string {
-    // Debug logging
-    console.log('Getting message content for messageId:', message.messageId);
-    console.log('HTML content length:', message.htmlContent?.length || 0);
-    console.log('Text content length:', message.textContent?.length || 0);
-    console.log('HTML content preview:', message.htmlContent?.substring(0, 100));
-    console.log('Text content preview:', message.textContent?.substring(0, 100));
-
     let content = '';
 
-    // Try HTML content first
+    // Try HTML content first (most emails have HTML)
     if (message.htmlContent && message.htmlContent.trim()) {
-      console.log('Using HTML content');
       content = message.htmlContent;
     }
-    // Fall back to text content
+    // Fall back to text content if no HTML
     else if (message.textContent && message.textContent.trim()) {
-      console.log('Using text content, converting to HTML');
-      // Convert plain text to HTML
+      // Convert plain text to HTML with proper formatting
       content = this.convertTextToHtml(message.textContent);
     }
 
-    // If no content available
+    // If no content available, show a friendly message
     if (!content || content.trim() === '') {
-      console.log('No content available, showing empty message');
-      return '<div style="color: #5f6368; font-style: italic; padding: 20px; text-align: center; border: 1px solid #e8eaed; border-radius: 8px; margin: 10px 0;">📧 This message has no content to display<br><small>MessageId: ' + message.messageId + '</small></div>';
+      return '<div style="color: #5f6368; font-style: italic; padding: 20px; text-align: center; border: 1px dashed #e8eaed; border-radius: 8px; background: #fafafa;">' +
+             '<mat-icon style="font-size: 48px; color: #dadce0;">mail_outline</mat-icon><br>' +
+             'This message has no content to display</div>';
     }
 
-    const sanitized = this.sanitizeHtml(content);
-    console.log('Final sanitized content length:', sanitized.length);
-    return sanitized;
+    // Sanitize and return
+    return this.sanitizeHtml(content);
   }
 
   convertTextToHtml(text: string): string {
     if (!text) return '';
 
-    // Convert plain text to HTML with proper line breaks
-    return text
+    // Escape HTML entities first
+    let escaped = text
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/\n\n/g, '</p><p>')
-      .replace(/\n/g, '<br>')
-      .replace(/^(.*)$/s, '<p>$1</p>')
-      .replace(/<p><\/p>/g, '<br>');
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+    // Convert URLs to clickable links
+    escaped = escaped.replace(
+      /(https?:\/\/[^\s]+)/g,
+      '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+    );
+
+    // Convert email addresses to mailto links
+    escaped = escaped.replace(
+      /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g,
+      '<a href="mailto:$1">$1</a>'
+    );
+
+    // Convert line breaks to HTML: double newlines become paragraphs, single newlines become <br>
+    escaped = escaped
+      .split('\n\n')
+      .map(para => {
+        const lines = para.split('\n').join('<br>');
+        return `<p style="margin: 8px 0;">${lines}</p>`;
+      })
+      .join('');
+
+    return `<div style="white-space: pre-wrap; word-wrap: break-word;">${escaped}</div>`;
   }
 
   sanitizeHtml(html: string): string {
     if (!html || html.trim() === '') {
-      return '<div style="color: #5f6368; font-style: italic; padding: 20px; text-align: center;">📧 This message has no content to display</div>';
+      return '<div style="color: #5f6368; font-style: italic; padding: 20px; text-align: center;">This message has no content to display</div>';
     }
 
     // Use DOMPurify for comprehensive HTML sanitization
     const sanitized = DOMPurify.sanitize(html, {
       ALLOWED_TAGS: [
-        'p', 'br', 'strong', 'b', 'em', 'i', 'u', 'span', 'div',
+        'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'span', 'div',
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
         'ul', 'ol', 'li', 'dl', 'dt', 'dd',
         'a', 'img',
-        'table', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot',
-        'blockquote', 'pre', 'code',
-        'font', 'center', 'hr'
+        'table', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot', 'caption',
+        'blockquote', 'pre', 'code', 'kbd', 'samp',
+        'font', 'center', 'hr', 'sup', 'sub', 'mark', 'del', 'ins'
       ],
       ALLOWED_ATTR: [
-        'href', 'src', 'alt', 'title', 'style', 'class',
+        'href', 'src', 'alt', 'title', 'style', 'class', 'id',
         'width', 'height', 'align', 'border', 'color', 'size',
-        'face', 'target', 'rel'
+        'face', 'target', 'rel', 'colspan', 'rowspan',
+        'cellpadding', 'cellspacing', 'bgcolor'
       ],
       ALLOW_DATA_ATTR: false,
       SANITIZE_DOM: true,
       FORCE_BODY: false,
       RETURN_DOM: false,
-      RETURN_DOM_FRAGMENT: false
+      RETURN_DOM_FRAGMENT: false,
+      // Add hooks to ensure external links open in new tab
+      ADD_ATTR: ['target'],
+      // Allow style attributes for email formatting
+      ALLOW_UNKNOWN_PROTOCOLS: false
     });
 
-    return sanitized || '<div style="color: #d93025; font-style: italic; padding: 20px; text-align: center;">⚠️ Unable to display message content safely</div>';
+    // If sanitization completely removed content, show a warning
+    if (!sanitized || sanitized.trim() === '') {
+      return '<div style="color: #d93025; font-style: italic; padding: 20px; text-align: center; border: 1px solid #fce8e6; border-radius: 8px; background: #fef7f7;">' +
+             'This message contains content that could not be displayed safely</div>';
+    }
+
+    return sanitized;
   }
 
   getCurrentMessage(): EmailDetailDTO | null {
@@ -1240,6 +1380,11 @@ export class MailDetailComponent implements OnInit, OnDestroy {
 
   // Reply functionality
   startReply(message: EmailDetailDTO, type: 'reply' | 'replyAll' | 'forward'): void {
+    // Close any existing reply first
+    if (this.showInlineReply) {
+      this.hideInlineReply();
+    }
+
     const replyData: ReplyData = {
       type,
       originalMessage: message,
@@ -1252,13 +1397,13 @@ export class MailDetailComponent implements OnInit, OnDestroy {
     this.currentReplyData = replyData;
     this.showInlineReply = true;
 
-    // Scroll to reply area
+    // Scroll to reply area after a short delay to ensure DOM is updated
     setTimeout(() => {
       const replyElement = document.querySelector('app-inline-reply');
       if (replyElement) {
         replyElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    }, 100);
+    }, 150);
   }
 
   private getReplyRecipients(message: EmailDetailDTO, type: string): string[] {

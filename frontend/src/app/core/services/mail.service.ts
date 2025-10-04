@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { EmailListResponse, HealthCheckResponse, EmailActionResponse, SendEmailResponse, DraftResponse, DraftUpdateData, ReplyData } from '../../shared/models/email.models';
-import { ConversationListResponse, ConversationDTO, EmailActionRequest, EmailDetailDTO } from '../../shared/models/conversation.models';
+import { ConversationListResponse, ConversationDTO, EmailActionRequest, EmailDetailDTO, EmailAction } from '../../shared/models/conversation.models';
 
 @Injectable({
   providedIn: 'root'
@@ -213,13 +213,21 @@ export class MailService {
    * Perform actions on emails (mark as read, delete, archive)
    */
   performEmailActions(request: EmailActionRequest): Observable<EmailActionResponse> {
-    return this.http.post<EmailActionResponse>(`${environment.apiUrl}/emails/actions`, request)
-      .pipe(
-        catchError(error => {
-          console.error('Error performing email actions:', error);
-          return throwError(() => error);
-        })
-      );
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.post<EmailActionResponse>(
+      `${environment.apiUrl}/emails/actions`,
+      request,
+      { headers }
+    ).pipe(
+      catchError(error => {
+        console.error('Error performing email actions:', error);
+        console.error('Request payload:', request);
+        return throwError(() => error);
+      })
+    );
   }
 
   /**
@@ -239,10 +247,44 @@ export class MailService {
    * Update existing draft
    */
   updateDraft(messageId: string, draftData: DraftUpdateData): Observable<DraftResponse> {
-    return this.http.put<DraftResponse>(`${environment.apiUrl}/emails/drafts/${messageId}`, draftData)
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.put<DraftResponse>(
+      `${environment.apiUrl}/emails/drafts/${messageId}`,
+      draftData,
+      { headers }
+    ).pipe(
+      catchError(error => {
+        console.error('Error updating draft:', error);
+        console.error('Request payload:', draftData);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Delete draft
+   */
+  deleteDraft(messageId: string): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/emails/drafts/${messageId}`)
       .pipe(
         catchError(error => {
-          console.error('Error updating draft:', error);
+          console.error('Error deleting draft:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  /**
+   * Bulk delete drafts in a single API call
+   */
+  bulkDeleteDrafts(messageIds: string[]): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/emails/drafts/bulk-delete`, { messageIds })
+      .pipe(
+        catchError(error => {
+          console.error('Error bulk deleting drafts:', error);
           return throwError(() => error);
         })
       );
@@ -252,10 +294,64 @@ export class MailService {
    * Send reply or forward email
    */
   sendReply(replyData: ReplyData | { type: string; originalMessageId: string; to: string[]; cc?: string[]; subject: string; htmlContent: string; threadId?: string }): Observable<SendEmailResponse> {
-    return this.http.post<SendEmailResponse>(`${environment.apiUrl}/emails/reply`, replyData)
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.post<SendEmailResponse>(
+      `${environment.apiUrl}/emails/reply`,
+      replyData,
+      { headers }
+    ).pipe(
+      catchError(error => {
+        console.error('Error sending reply:', error);
+        console.error('Request payload:', replyData);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Toggle star status for emails
+   */
+  toggleStar(messageIds: string[], starred: boolean, folder: string): Observable<EmailActionResponse> {
+    const request: EmailActionRequest = {
+      messageIds,
+      action: starred ? EmailAction.STAR : EmailAction.UNSTAR,
+      folder
+    };
+
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.post<EmailActionResponse>(
+      `${environment.apiUrl}/emails/actions`,
+      request,
+      { headers }
+    ).pipe(
+      catchError(error => {
+        console.error('Error toggling star:', error);
+        console.error('Request payload:', request);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Mark emails as important
+   */
+  markImportant(messageIds: string[], important: boolean, folder: string): Observable<EmailActionResponse> {
+    const request: EmailActionRequest = {
+      messageIds,
+      action: important ? EmailAction.MARK_IMPORTANT : EmailAction.UNMARK_IMPORTANT,
+      folder
+    };
+
+    return this.http.post<EmailActionResponse>(`${environment.apiUrl}/emails/actions`, request)
       .pipe(
         catchError(error => {
-          console.error('Error sending reply:', error);
+          console.error('Error marking as important:', error);
           return throwError(() => error);
         })
       );

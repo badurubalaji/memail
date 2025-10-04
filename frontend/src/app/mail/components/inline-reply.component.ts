@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { QuillModule, QuillEditorComponent } from 'ngx-quill';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -54,7 +55,8 @@ export interface ReplyRequest {
     MatTooltipModule,
     MatProgressBarModule,
     MatMenuModule,
-    MatDividerModule
+    MatDividerModule,
+    QuillModule
   ],
   template: `
     <mat-card class="inline-reply-card" [@expandCollapse]>
@@ -115,31 +117,21 @@ export interface ReplyRequest {
             <input matInput formControlName="subject" placeholder="Subject">
           </mat-form-field>
 
-          <!-- Message Body -->
-          <mat-form-field appearance="outline" class="message-field">
-            <mat-label>Message</mat-label>
-            <textarea matInput
-                      formControlName="body"
-                      placeholder="Type your message..."
-                      [rows]="isExpanded ? 12 : 6"
-                      cdkTextareaAutosize
-                      #autosize="cdkTextareaAutosize">
-            </textarea>
-          </mat-form-field>
+          <!-- Message Body with Quill Editor -->
+          <div class="quill-editor-container">
+            <quill-editor
+              formControlName="body"
+              [modules]="quillModules"
+              [styles]="quillStyles"
+              placeholder="Type your message..."
+              class="quill-editor">
+            </quill-editor>
+          </div>
 
-          <!-- Original Message Quote -->
-          <div class="quoted-message" *ngIf="quotedContent">
-            <mat-divider></mat-divider>
-            <div class="quote-header">
-              <button type="button" mat-button class="quote-toggle"
-                      (click)="showQuote = !showQuote">
-                <mat-icon>{{ showQuote ? 'expand_less' : 'expand_more' }}</mat-icon>
-                {{ getQuoteHeaderText() }}
-              </button>
-            </div>
-            <div *ngIf="showQuote" class="quote-content" [@expandCollapse]>
-              <div [innerHTML]="quotedContent"></div>
-            </div>
+          <!-- Original Message Quote (Always shown inline) -->
+          <div class="quoted-message-inline" *ngIf="quotedContent">
+            <mat-divider class="quote-divider"></mat-divider>
+            <div class="quote-content-inline" [innerHTML]="quotedContent"></div>
           </div>
 
           <!-- Actions -->
@@ -228,7 +220,8 @@ export interface ReplyRequest {
       border: 2px solid #1a73e8;
       border-radius: 8px;
       overflow: hidden;
-      margin-top: 16px;
+      margin: 16px 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .reply-header {
@@ -297,6 +290,11 @@ export interface ReplyRequest {
       flex-direction: column;
       gap: 12px;
       margin-bottom: 12px;
+      width: 100%;
+    }
+
+    .cc-bcc-section .recipient-field {
+      width: 100%;
     }
 
     .subject-field {
@@ -304,40 +302,75 @@ export interface ReplyRequest {
       margin-bottom: 12px;
     }
 
-    .message-field {
+    .quill-editor-container {
       width: 100%;
+      margin-bottom: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .quill-editor {
+      background: #ffffff;
+    }
+
+    .quill-editor-container ::ng-deep .ql-toolbar {
+      background: #f8f9fa;
+      border: none;
+      border-bottom: 1px solid #e8eaed;
+      padding: 8px;
+    }
+
+    .quill-editor-container ::ng-deep .ql-container {
+      border: none;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      min-height: 150px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .quill-editor-container ::ng-deep .ql-editor {
+      min-height: 150px;
+      max-height: 400px;
+      padding: 12px;
+      line-height: 1.6;
+    }
+
+    .quill-editor-container ::ng-deep .ql-editor.ql-blank::before {
+      color: #9e9e9e;
+      font-style: italic;
+    }
+
+    .quoted-message-inline {
+      margin-top: 24px;
       margin-bottom: 16px;
     }
 
-    .message-field textarea {
-      min-height: 120px;
-      resize: vertical;
+    .quote-divider {
+      margin-bottom: 16px;
+      border-top-color: #dadce0;
     }
 
-    .quoted-message {
-      margin-top: 16px;
-    }
-
-    .quote-header {
-      margin: 8px 0;
-    }
-
-    .quote-toggle {
-      color: #5f6368;
-      font-size: 12px;
-      padding: 4px 8px;
-      min-height: auto;
-    }
-
-    .quote-content {
+    .quote-content-inline {
       background: #f8f9fa;
-      border-left: 3px solid #e8eaed;
+      border-left: 4px solid #dadce0;
       padding: 16px;
-      margin: 8px 0;
+      margin: 0;
       font-size: 13px;
       color: #5f6368;
-      max-height: 200px;
+      max-height: 300px;
       overflow-y: auto;
+      border-radius: 4px;
+    }
+
+    .quote-content-inline div {
+      line-height: 1.5;
+    }
+
+    .quote-content-inline strong {
+      color: #202124;
+      font-weight: 500;
     }
 
     .reply-actions {
@@ -405,9 +438,31 @@ export class InlineReplyComponent implements OnInit, OnDestroy {
   replyForm!: FormGroup;
   isExpanded = false;
   showCcBcc = false;
-  showQuote = false;
   isSending = false;
   quotedContent = '';
+
+  // Quill editor configuration
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote', 'code-block'],
+      [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean'],                                        // remove formatting button
+      ['link', 'image']                                 // link and image
+    ]
+  };
+
+  quillStyles = {
+    height: '200px'
+  };
 
   private destroy$ = new Subject<void>();
 
@@ -488,16 +543,6 @@ export class InlineReplyComponent implements OnInit, OnDestroy {
     }
   }
 
-  getQuoteHeaderText(): string {
-    const date = new Date(this.replyData.originalMessage.date).toLocaleDateString();
-    const from = this.extractDisplayName(this.replyData.originalMessage.from);
-
-    if (this.replyData.type === 'forward') {
-      return `Forwarded message from ${from}`;
-    }
-    return `${from} wrote on ${date}`;
-  }
-
   toggleExpanded(): void {
     this.isExpanded = !this.isExpanded;
   }
@@ -570,7 +615,8 @@ export class InlineReplyComponent implements OnInit, OnDestroy {
   }
 
   private combineBodyWithQuote(body: string): string {
-    return body + (this.showQuote ? '\n\n' + this.quotedContent : '');
+    // Always include the quoted content since it's shown inline
+    return body + '\n\n' + this.quotedContent;
   }
 
   private extractDisplayName(email: string): string {

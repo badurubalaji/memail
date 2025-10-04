@@ -33,8 +33,13 @@ export class AuthService {
     if (token && user && !this.isTokenExpired(token)) {
       this.currentUserSubject.next(user);
       this.isAuthenticatedSubject.next(true);
+      console.log('Auth initialized with stored token');
     } else {
-      this.logout();
+      // Don't call logout() here - just clear local data silently
+      // This prevents force logout on page refresh when token is missing/expired
+      console.log('No valid auth token found - user will need to login');
+      this.currentUserSubject.next(null);
+      this.isAuthenticatedSubject.next(false);
     }
   }
 

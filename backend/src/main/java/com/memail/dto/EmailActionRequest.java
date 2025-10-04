@@ -14,7 +14,14 @@ public class EmailActionRequest {
         DELETE,
         ARCHIVE,
         APPLY_LABEL,
-        REMOVE_LABEL
+        REMOVE_LABEL,
+        STAR,
+        UNSTAR,
+        MARK_IMPORTANT,
+        UNMARK_IMPORTANT,
+        MOVE_TO_SPAM,
+        MOVE_TO_INBOX,
+        MOVE_TO_TRASH
     }
 
     // Constructors

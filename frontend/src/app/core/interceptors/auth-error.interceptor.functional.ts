@@ -16,24 +16,37 @@ export const authErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Check for various authentication-related errors
-      const isAuthError =
-        error.status === 401 || // Unauthorized
-        error.status === 403 || // Forbidden (token might be invalid)
+      // Don't logout for network errors (offline support)
+      if (error.status === 0 || !navigator.onLine) {
+        console.log('Network error detected - offline mode. Not logging out.');
+        return throwError(() => error);
+      }
+
+      // Only force logout on auth endpoint failures (login/logout)
+      // This prevents forced logout when server restarts or during normal API errors
+      const isAuthEndpoint = req.url.includes('/auth/login') || req.url.includes('/auth/logout');
+
+      // Check for critical authentication errors
+      const isCriticalAuthError =
+        (error.status === 401 && isAuthEndpoint) || // Login failed
         // Check for specific auth error messages from the backend
-        (error.status === 500 && error.error?.message?.includes('not authenticated')) ||
-        (error.status === 500 && error.error?.message?.includes('connection lost')) ||
         (error.status === 500 && error.error?.message?.includes('User not authenticated'));
 
-      if (isAuthError) {
-        const errorMessage = error.error?.message || 'Token may be invalid or expired';
-        console.log(`Authentication error detected (${error.status}): ${errorMessage}. Logging out user.`);
+      if (isCriticalAuthError) {
+        const errorMessage = error.error?.message || 'Authentication failed';
+        console.log(`Critical authentication error detected (${error.status}): ${errorMessage}. Logging out user.`);
 
         // Force logout without making API call (since we're already getting auth errors)
         authService.forceLogout();
 
         // Return a user-friendly error message
         return throwError(() => new Error('Your session has expired. Please log in again.'));
+      }
+
+      // For 401 errors on regular API endpoints, just log and let the component handle it
+      // Don't force logout - this allows offline mode and graceful handling of server restarts
+      if (error.status === 401 && !isAuthEndpoint) {
+        console.log('API returned 401 - token may be invalid. Consider re-authenticating.');
       }
 
       // For all other errors, just re-throw them to be handled by the component

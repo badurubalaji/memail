@@ -3,8 +3,11 @@ package com.memail.service;
 import com.memail.dto.LoginRequest;
 import com.memail.dto.LoginResponse;
 import com.memail.model.RefreshToken;
+import com.memail.model.UserCredentials;
 import com.memail.repository.RefreshTokenRepository;
+import com.memail.repository.UserCredentialsRepository;
 import com.memail.security.JwtTokenProvider;
+import com.memail.util.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,12 @@ public class AuthService {
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private UserCredentialsRepository userCredentialsRepository;
+
+    @Autowired
+    private EncryptionUtil encryptionUtil;
 
     /**
      * Authenticate user against IMAP server and generate JWT token with refresh token
@@ -48,6 +57,28 @@ public class AuthService {
             throw new BadCredentialsException("Invalid email or password");
         }
 
+        // Store encrypted IMAP credentials for session persistence across server restarts
+        try {
+            String encryptedPassword = encryptionUtil.encrypt(password);
+
+            Optional<UserCredentials> existingCreds = userCredentialsRepository.findByEmail(email);
+            if (existingCreds.isPresent()) {
+                // Update existing credentials
+                UserCredentials creds = existingCreds.get();
+                creds.setEncryptedPassword(encryptedPassword);
+                creds.setLastConnectionAt(LocalDateTime.now());
+                userCredentialsRepository.save(creds);
+            } else {
+                // Create new credentials entry
+                UserCredentials creds = new UserCredentials(email, encryptedPassword);
+                creds.setLastConnectionAt(LocalDateTime.now());
+                userCredentialsRepository.save(creds);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to store encrypted credentials: " + e.getMessage());
+            // Don't fail the login if credential storage fails
+        }
+
         // Generate short-lived access token (15 minutes)
         String accessToken = jwtTokenProvider.generateAccessToken(email);
 
@@ -69,10 +100,12 @@ public class AuthService {
     }
 
     /**
-     * Logout user (close IMAP connection)
+     * Logout user (close IMAP connection and optionally delete credentials)
      */
     public void logout(String email) {
         mailService.closeConnection(email);
+        // Note: We keep encrypted credentials in DB for auto-reconnect
+        // Only delete them if user explicitly requests account removal
     }
 
     /**

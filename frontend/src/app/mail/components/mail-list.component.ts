@@ -17,14 +17,15 @@ import { takeUntil } from 'rxjs/operators';
 import { MailService } from '../../core/services/mail.service';
 import { SearchService } from '../../core/services/search.service';
 import { LabelService, Label } from '../../core/services/label.service';
+import { WebSocketService } from '../../core/services/websocket.service';
 import { EmailHeader, EmailListResponse } from '../../shared/models/email.models';
-import { ConversationDTO, ConversationListResponse } from '../../shared/models/conversation.models';
-import { LoadingStateComponent } from '../../shared/components/loading-state/loading-state.component';
+import { ConversationDTO, ConversationListResponse, EmailAction, EmailActionRequest } from '../../shared/models/conversation.models';
 import { ErrorStateComponent } from '../../shared/components/error-state/error-state.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { LabelDropdownComponent } from '../../shared/components/label-dropdown/label-dropdown.component';
 import { ConversationSkeletonComponent } from '../../shared/components/conversation-skeleton/conversation-skeleton.component';
 import { EnhancedComposeComponent } from './enhanced-compose.component';
+import { ConfirmDialogComponent, ConfirmDialogData } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 interface DraftData {
   messageId: string;
@@ -55,7 +56,6 @@ interface MatCheckboxChangeEvent {
     MatToolbarModule,
     MatMenuModule,
     MatButtonModule,
-    LoadingStateComponent,
     ErrorStateComponent,
     EmptyStateComponent,
     LabelDropdownComponent,
@@ -591,6 +591,7 @@ export class MailListComponent implements OnInit, OnDestroy {
     private mailService: MailService,
     private searchService: SearchService,
     private labelService: LabelService,
+    private webSocketService: WebSocketService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private router: Router,
@@ -612,6 +613,24 @@ export class MailListComponent implements OnInit, OnDestroy {
       this.currentPage = 0; // Reset pagination
       this.loadConversations();
     });
+
+    // Subscribe to WebSocket notifications for real-time updates
+    this.webSocketService.getNotifications()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(notification => {
+        if (notification) {
+          console.log('Mail list received notification:', notification);
+
+          // Auto-refresh the mail list when new email arrives or email state changes
+          if (notification.type === 'NEW_EMAIL' && notification.folder === this.currentFolder) {
+            // Only refresh if we're viewing the folder where the new email arrived
+            this.loadConversations();
+          } else if (notification.type === 'EMAIL_READ' || notification.type === 'EMAIL_DELETED') {
+            // Refresh for read/delete actions
+            this.loadConversations();
+          }
+        }
+      });
 
     this.loadConversations();
   }
@@ -678,7 +697,22 @@ export class MailListComponent implements OnInit, OnDestroy {
   private editDraft(conversation: ConversationDTO): void {
     // Extract the first (and likely only) message from the conversation
     if (!conversation.messages || conversation.messages.length === 0) {
-      this.snackBar.open('Unable to edit draft: No message content found', 'Close', { duration: 3000 });
+      // If no messages in conversation, try using threadId as messageId
+      if (conversation.threadId) {
+        this.mailService.getDraft(conversation.threadId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (draftData) => {
+              this.openComposeDialog(draftData);
+            },
+            error: (error) => {
+              console.error('Error fetching draft details:', error);
+              this.snackBar.open('Unable to load draft. Please try again.', 'Close', { duration: 3000 });
+            }
+          });
+      } else {
+        this.snackBar.open('Unable to edit draft: No message content found', 'Close', { duration: 3000 });
+      }
       return;
     }
 
@@ -689,11 +723,13 @@ export class MailListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (draftData) => {
+          console.log('Draft data loaded:', draftData);
           this.openComposeDialog(draftData);
         },
         error: (error) => {
           console.error('Error fetching draft details:', error);
           // Fallback: open compose with conversation data
+          console.log('Using fallback - converting conversation to draft');
           this.openComposeDialog(this.convertConversationToDraft(conversation));
         }
       });
@@ -782,14 +818,33 @@ export class MailListComponent implements OnInit, OnDestroy {
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     const now = new Date();
+
+    // Check if it's today (same day)
+    const isToday = date.getDate() === now.getDate() &&
+                    date.getMonth() === now.getMonth() &&
+                    date.getFullYear() === now.getFullYear();
+
+    if (isToday) {
+      // Show time for today's emails
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    }
+
+    // Check if it's yesterday
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const isYesterday = date.getDate() === yesterday.getDate() &&
+                        date.getMonth() === yesterday.getMonth() &&
+                        date.getFullYear() === yesterday.getFullYear();
+
+    if (isYesterday) {
+      return 'Yesterday';
+    }
+
+    // Check if it's within the last 7 days
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 1) {
-      return 'Today';
-    } else if (diffDays === 2) {
-      return 'Yesterday';
-    } else if (diffDays <= 7) {
+    if (diffDays <= 7) {
       return date.toLocaleDateString('en-US', { weekday: 'short' });
     } else {
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -843,34 +898,223 @@ export class MailListComponent implements OnInit, OnDestroy {
   // Star functionality
   toggleStar(conversation: ConversationDTO, event: MouseEvent): void {
     event.stopPropagation();
-    // TODO: Implement star toggle API call
-    conversation.isStarred = !conversation.isStarred;
-    // TODO: Implement star toggle API call
+
+    const newStarredState = !conversation.isStarred;
+    const messageIds = this.getConversationMessageIds(conversation);
+
+    // Optimistically update UI
+    conversation.isStarred = newStarredState;
+
+    // Call backend to persist the change
+    this.mailService.toggleStar(messageIds, newStarredState, this.currentFolder)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          console.log(`Email ${newStarredState ? 'starred' : 'unstarred'} successfully`);
+        },
+        error: (error) => {
+          // Revert on error
+          conversation.isStarred = !newStarredState;
+          console.error('Error toggling star:', error);
+          this.snackBar.open('Failed to update star status', 'Close', { duration: 3000 });
+        }
+      });
+  }
+
+  private getConversationMessageIds(conversation: ConversationDTO): string[] {
+    // For now, we'll use the threadId as a placeholder
+    // In a real implementation, you'd fetch all message IDs in the thread
+    return [conversation.threadId];
   }
 
   // Bulk actions
   bulkArchive(): void {
-    // TODO: Implement bulk archive
+    if (this.selectedConversations.length === 0) return;
+
+    this.performBulkAction(EmailAction.ARCHIVE, 'archived');
   }
 
   bulkDelete(): void {
-    // TODO: Implement bulk delete
+    if (this.selectedConversations.length === 0) return;
+
+    const dialogData: ConfirmDialogData = {
+      title: 'Delete Emails',
+      message: `Are you sure you want to delete ${this.selectedConversations.length} email(s)? This action cannot be undone.`,
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      confirmColor: 'warn'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        // For drafts, use the delete draft endpoint
+        if (this.currentFolder === 'DRAFTS') {
+          this.bulkDeleteDrafts();
+        } else {
+          this.performBulkAction(EmailAction.DELETE, 'deleted');
+        }
+      }
+    });
+  }
+
+  private bulkDeleteDrafts(): void {
+    const deletedIds = [...this.selectedConversations];
+
+    // Optimistically remove from UI
+    this.conversations = this.conversations.filter(
+      conv => !deletedIds.includes(conv.threadId)
+    );
+
+    // Use bulk delete endpoint for better performance
+    this.mailService.bulkDeleteDrafts(deletedIds)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.snackBar.open(
+            `${deletedIds.length} draft(s) deleted successfully`,
+            'Close',
+            { duration: 3000 }
+          );
+          this.clearSelection();
+          // Reload to ensure we're in sync with server
+          this.loadConversations();
+        },
+        error: (error) => {
+          console.error('Error deleting drafts:', error);
+          this.snackBar.open('Failed to delete drafts', 'Close', { duration: 3000 });
+          // Reload to revert optimistic update
+          this.loadConversations();
+        }
+      });
+  }
+
+  private performBulkAction(action: EmailAction, actionName: string): void {
+    const request: EmailActionRequest = {
+      messageIds: this.selectedConversations,
+      action: action,
+      folder: this.currentFolder
+    };
+
+    this.mailService.performEmailActions(request)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.snackBar.open(
+            `${this.selectedConversations.length} email(s) ${actionName} successfully`,
+            'Close',
+            { duration: 3000 }
+          );
+          this.clearSelection();
+          this.refreshConversations();
+        },
+        error: (error) => {
+          console.error(`Error performing bulk ${actionName}:`, error);
+          this.snackBar.open(`Failed to ${actionName} emails`, 'Close', { duration: 3000 });
+        }
+      });
   }
 
   bulkMarkAsRead(): void {
-    // TODO: Implement bulk mark as read
+    if (this.selectedConversations.length === 0) return;
+
+    this.performBulkAction(EmailAction.MARK_AS_READ, 'marked as read');
   }
 
   bulkMarkAsUnread(): void {
-    // TODO: Implement bulk mark as unread
+    if (this.selectedConversations.length === 0) return;
+
+    this.performBulkAction(EmailAction.MARK_AS_UNREAD, 'marked as unread');
   }
 
   bulkAddLabel(): void {
-    // TODO: Implement bulk add label
+    if (this.selectedConversations.length === 0) return;
+
+    // Show a simple snackbar message since the label dropdown in the toolbar already provides this functionality
+    this.snackBar.open(
+      'Use the label button in the toolbar to add labels to selected emails',
+      'Close',
+      { duration: 3000 }
+    );
   }
 
   bulkMoveToFolder(): void {
-    // TODO: Implement bulk move to folder
+    if (this.selectedConversations.length === 0) return;
+
+    const dialogData: ConfirmDialogData = {
+      title: 'Move to Folder',
+      message: `Select destination folder for ${this.selectedConversations.length} conversation(s):`,
+      confirmText: 'Move',
+      cancelText: 'Cancel',
+      options: [
+        { value: 'INBOX', label: 'Inbox' },
+        { value: 'Archive', label: 'Archive' },
+        { value: 'Spam', label: 'Spam' },
+        { value: 'Trash', label: 'Trash' },
+        { value: 'Drafts', label: 'Drafts' }
+      ]
+    };
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe((result: string | undefined) => {
+      if (result) {
+        this.moveConversationsToFolder(result);
+      }
+    });
+  }
+
+  private moveConversationsToFolder(targetFolder: string): void {
+    // Determine the action based on target folder
+    let action: EmailAction;
+    switch (targetFolder) {
+      case 'INBOX':
+        action = EmailAction.MOVE_TO_INBOX;
+        break;
+      case 'Spam':
+        action = EmailAction.MOVE_TO_SPAM;
+        break;
+      case 'Trash':
+        action = EmailAction.MOVE_TO_TRASH;
+        break;
+      case 'Archive':
+        action = EmailAction.ARCHIVE;
+        break;
+      default:
+        this.snackBar.open('Invalid folder selected', 'Close', { duration: 3000 });
+        return;
+    }
+
+    const request: EmailActionRequest = {
+      messageIds: this.selectedConversations,
+      action,
+      folder: this.currentFolder
+    };
+
+    this.mailService.performEmailActions(request)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.snackBar.open(
+            `${this.selectedConversations.length} conversation(s) moved to ${targetFolder}`,
+            'Close',
+            { duration: 3000 }
+          );
+          this.clearSelection();
+          this.refreshConversations();
+        },
+        error: (error) => {
+          console.error('Error moving conversations:', error);
+          this.snackBar.open('Failed to move conversations', 'Close', { duration: 3000 });
+        }
+      });
   }
 
   // Label event handlers

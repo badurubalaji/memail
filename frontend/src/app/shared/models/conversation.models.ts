@@ -46,6 +46,7 @@ export interface EmailDetailDTO extends EmailHeaderDTO {
 export interface EmailActionRequest {
   messageIds: string[];
   action: EmailAction;
+  folder?: string;
 }
 
 export enum EmailAction {
@@ -55,5 +56,9 @@ export enum EmailAction {
   ARCHIVE = 'ARCHIVE',
   MOVE_TO_INBOX = 'MOVE_TO_INBOX',
   MOVE_TO_SPAM = 'MOVE_TO_SPAM',
-  MOVE_TO_TRASH = 'MOVE_TO_TRASH'
+  MOVE_TO_TRASH = 'MOVE_TO_TRASH',
+  STAR = 'STAR',
+  UNSTAR = 'UNSTAR',
+  MARK_IMPORTANT = 'MARK_IMPORTANT',
+  UNMARK_IMPORTANT = 'UNMARK_IMPORTANT'
 }

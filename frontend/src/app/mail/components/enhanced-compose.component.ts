@@ -16,7 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Subject, debounceTime, Observable, of } from 'rxjs';
+import { Subject, debounceTime, Observable, of, firstValueFrom } from 'rxjs';
 import { takeUntil, startWith, map, switchMap, catchError } from 'rxjs/operators';
 import { QuillModule } from 'ngx-quill';
 
@@ -31,6 +31,8 @@ interface AttachmentFile extends File {
   uploading?: boolean;
   progress?: number;
   id?: string;
+  isExistingAttachment?: boolean;
+  originalData?: any;
 }
 
 interface ComposeDialogData {
@@ -541,6 +543,8 @@ interface ComposeDialogData {
       flex: 1 !important;
       display: flex !important;
       flex-direction: column !important;
+      overflow-y: auto !important;
+      max-height: 100% !important;
     }
 
     :host ::ng-deep .ql-editor {
@@ -550,6 +554,8 @@ interface ComposeDialogData {
       line-height: 1.6 !important;
       color: #202124 !important;
       font-family: 'Google Sans', Roboto, sans-serif !important;
+      overflow-y: auto !important;
+      max-height: 100% !important;
     }
 
     :host ::ng-deep .ql-editor.ql-blank::before {
@@ -802,7 +808,30 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
 
     // Handle attachments if any
     if (draftData.attachments && Array.isArray(draftData.attachments)) {
-      // TODO: Handle existing attachments
+      // Convert EmailAttachment objects to AttachmentFile objects for display
+      this.attachments = draftData.attachments.map((attachment: any) => {
+        // Check if it's already a File object or an EmailAttachment
+        if (attachment instanceof File) {
+          return attachment as AttachmentFile;
+        } else {
+          // Create a pseudo-File object from EmailAttachment for display purposes
+          // We'll keep track of the original attachment data
+          const pseudoFile = {
+            name: attachment.filename,
+            size: attachment.size,
+            type: attachment.contentType,
+            id: attachment.id,
+            lastModified: Date.now(),
+            // Mark as existing attachment (not uploading)
+            uploading: false,
+            progress: 100,
+            // Store original attachment data for sending
+            isExistingAttachment: true,
+            originalData: attachment
+          } as any;
+          return pseudoFile as AttachmentFile;
+        }
+      });
     }
   }
 
@@ -994,10 +1023,19 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
       attachments: this.attachments
     };
 
-    this.mailService.saveDraft(draftData).pipe(
+    // If we already have a draft ID, update it instead of creating a new one
+    const saveObservable = this.currentDraftId
+      ? this.mailService.updateDraft(this.currentDraftId, draftData)
+      : this.mailService.saveDraft(draftData);
+
+    saveObservable.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (response) => {
+        // Store the draft ID for future updates
+        if (!this.currentDraftId && response.messageId) {
+          this.currentDraftId = response.messageId;
+        }
         this.autoSaveStatus = 'Draft saved';
         setTimeout(() => {
           this.autoSaveStatus = '';
@@ -1028,8 +1066,8 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
       attachments: this.attachments
     };
 
-    if (this.isEditingDraft && this.currentDraftId) {
-      // Update existing draft
+    if (this.currentDraftId) {
+      // Update existing draft (whether from auto-save or editing)
       this.mailService.updateDraft(this.currentDraftId, draftData).pipe(
         takeUntil(this.destroy$)
       ).subscribe({
@@ -1043,11 +1081,14 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      // Create new draft
+      // Create new draft only if no currentDraftId exists
       this.mailService.saveDraft(draftData).pipe(
         takeUntil(this.destroy$)
       ).subscribe({
         next: (response) => {
+          if (response.messageId) {
+            this.currentDraftId = response.messageId;
+          }
           this.snackBar.open('Draft saved successfully', 'Close', { duration: 2000 });
           this.closeDialog('saved');
         },
@@ -1099,16 +1140,21 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
         attachments: this.attachments
       };
 
-      if (this.isEditingDraft && this.currentDraftId) {
-        // If editing a draft, delete it after sending
-        await this.mailService.sendEmail(emailData).toPromise();
-        // TODO: Add backend endpoint to delete draft after sending
-        this.snackBar.open('Email sent successfully!', 'Close', { duration: 3000 });
-      } else {
-        await this.mailService.sendEmail(emailData).toPromise();
-        this.snackBar.open('Email sent successfully!', 'Close', { duration: 3000 });
+      // Send the email
+      await firstValueFrom(this.mailService.sendEmail(emailData));
+
+      // If we have a draft (either from editing or auto-save), delete it after successful send
+      if (this.currentDraftId) {
+        try {
+          await firstValueFrom(this.mailService.deleteDraft(this.currentDraftId));
+          console.log('Draft deleted after sending:', this.currentDraftId);
+        } catch (error) {
+          console.error('Failed to delete draft after sending:', error);
+          // Don't fail the send operation if draft deletion fails
+        }
       }
 
+      this.snackBar.open('Email sent successfully!', 'Close', { duration: 3000 });
       this.closeDialog('sent');
     } catch (error) {
       console.error('Error sending email:', error);

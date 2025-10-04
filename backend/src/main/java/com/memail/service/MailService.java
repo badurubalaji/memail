@@ -10,6 +10,9 @@ import com.memail.dto.EmailDetailDTO;
 import com.memail.dto.EmailActionRequest;
 import com.ashulabs.memail.dto.DraftEmailDTO;
 import com.ashulabs.memail.dto.ReplyRequestDTO;
+import com.memail.model.UserCredentials;
+import com.memail.repository.UserCredentialsRepository;
+import com.memail.util.EncryptionUtil;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -30,6 +33,7 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.Date;
+import java.util.Optional;
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 
@@ -41,6 +45,12 @@ public class MailService {
 
     @Autowired
     private LabelService labelService;
+
+    @Autowired
+    private UserCredentialsRepository userCredentialsRepository;
+
+    @Autowired
+    private EncryptionUtil encryptionUtil;
 
     @Value("${mail.imap.host}")
     private String imapHost;
@@ -144,10 +154,57 @@ public class MailService {
     }
 
     /**
-     * Get user's IMAP store connection
+     * Get user's IMAP store connection with auto-reconnect support
+     * If the store is missing or disconnected, attempts to reconnect using stored credentials
+     * This enables persistent sessions across server restarts
      */
     public Store getUserStore(String email) {
-        return userStores.get(email);
+        Store store = userStores.get(email);
+
+        // Check if store exists and is connected
+        if (store != null && store.isConnected()) {
+            return store;
+        }
+
+        // Store is missing or disconnected - attempt auto-reconnect
+        System.out.println("=== AUTO-RECONNECT: IMAP store not found or disconnected for user: " + email + " ===");
+
+        try {
+            // Retrieve encrypted credentials from database
+            Optional<UserCredentials> credentialsOpt = userCredentialsRepository.findByEmail(email);
+
+            if (credentialsOpt.isEmpty()) {
+                System.err.println("No stored credentials found for user: " + email);
+                return null;
+            }
+
+            UserCredentials credentials = credentialsOpt.get();
+
+            // Decrypt password
+            String password = encryptionUtil.decrypt(credentials.getEncryptedPassword());
+
+            // Reconnect to IMAP server
+            System.out.println("Attempting to reconnect to IMAP server for user: " + email);
+            Store reconnectedStore = connectToImapServer(email, password);
+
+            if (reconnectedStore != null && reconnectedStore.isConnected()) {
+                // Store the reconnected store
+                userStores.put(email, reconnectedStore);
+
+                // Update last connection time
+                credentials.setLastConnectionAt(LocalDateTime.now());
+                userCredentialsRepository.save(credentials);
+
+                System.out.println("=== AUTO-RECONNECT SUCCESSFUL for user: " + email + " ===");
+                return reconnectedStore;
+            }
+
+        } catch (Exception e) {
+            System.err.println("Auto-reconnect failed for user " + email + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**
@@ -205,8 +262,44 @@ public class MailService {
         return folderName != null && (
             folderName.equalsIgnoreCase("DRAFTS") ||
             folderName.equalsIgnoreCase("SENT") ||
-            folderName.equalsIgnoreCase("TRASH")
+            folderName.equalsIgnoreCase("TRASH") ||
+            folderName.equalsIgnoreCase("STARRED") ||
+            folderName.equalsIgnoreCase("IMPORTANT") ||
+            folderName.equalsIgnoreCase("SPAM")
         );
+    }
+
+    /**
+     * Initialize default folders for user if they don't exist
+     * Creates: DRAFTS, SENT, TRASH, STARRED, IMPORTANT, SPAM
+     */
+    public void initializeDefaultFolders(String email) {
+        try {
+            Store store = getUserStore(email);
+            if (store == null || !store.isConnected()) {
+                System.err.println("Cannot initialize folders - user not connected: " + email);
+                return;
+            }
+
+            String[] defaultFolders = {"DRAFTS", "SENT", "TRASH", "STARRED", "IMPORTANT", "SPAM"};
+
+            for (String folderName : defaultFolders) {
+                try {
+                    Folder folder = store.getFolder(folderName);
+                    if (!folder.exists()) {
+                        if (folder.create(Folder.HOLDS_MESSAGES)) {
+                            System.out.println("✅ Created default folder: " + folderName + " for user: " + email);
+                        } else {
+                            System.err.println("❌ Failed to create folder: " + folderName);
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error creating folder " + folderName + ": " + e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to initialize default folders: " + e.getMessage());
+        }
     }
 
     /**
@@ -222,6 +315,12 @@ public class MailService {
                 return new String[]{"Trash", "Deleted", "Deleted Items", "TRASH"};
             case "INBOX":
                 return new String[]{"INBOX", "Inbox"};
+            case "STARRED":
+                return new String[]{"Starred", "STARRED", "Star"};
+            case "IMPORTANT":
+                return new String[]{"Important", "IMPORTANT"};
+            case "SPAM":
+                return new String[]{"Spam", "SPAM", "Junk", "Junk Email"};
             default:
                 return new String[]{folderName};
         }
@@ -301,6 +400,11 @@ public class MailService {
      */
     public EmailHeaderDTO convertToEmailHeaderDTO(Message message) {
         try {
+            // Skip deleted messages
+            if (message.isSet(Flags.Flag.DELETED)) {
+                return null;
+            }
+
             EmailHeaderDTO dto = new EmailHeaderDTO();
 
             // Extract basic information
@@ -397,6 +501,47 @@ public class MailService {
             // If we can't extract content, return empty
         }
         return "";
+    }
+
+    /**
+     * Extract full content from message (for draft editing, no truncation)
+     */
+    private String extractFullContent(Message message) {
+        try {
+            if (message.isMimeType("text/html")) {
+                return (String) message.getContent();
+            } else if (message.isMimeType("text/plain")) {
+                return (String) message.getContent();
+            } else if (message.isMimeType("multipart/*")) {
+                Multipart multipart = (Multipart) message.getContent();
+                return getFullContentFromMultipart(multipart);
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR extracting full content: " + e.getMessage());
+        }
+        return "";
+    }
+
+    /**
+     * Extract full content from multipart message
+     */
+    private String getFullContentFromMultipart(Multipart multipart) throws MessagingException {
+        StringBuilder result = new StringBuilder();
+        try {
+            for (int i = 0; i < multipart.getCount(); i++) {
+                BodyPart bodyPart = multipart.getBodyPart(i);
+                if (bodyPart.isMimeType("text/html")) {
+                    return bodyPart.getContent().toString(); // Prefer HTML
+                } else if (bodyPart.isMimeType("text/plain")) {
+                    result.append(bodyPart.getContent().toString());
+                } else if (bodyPart.isMimeType("multipart/*")) {
+                    result.append(getFullContentFromMultipart((Multipart) bodyPart.getContent()));
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR extracting multipart content: " + e.getMessage());
+        }
+        return result.toString();
     }
 
     /**
@@ -703,7 +848,7 @@ public class MailService {
             List<EmailDetailDTO> allMessages = new ArrayList<>();
             Set<String> processedMessageIds = new HashSet<>();
 
-            for (String folderName : Arrays.asList("INBOX", "SENT", "DRAFTS", "TRASH")) {
+            for (String folderName : Arrays.asList("INBOX", "SENT", "DRAFTS", "TRASH", "STARRED", "IMPORTANT", "SPAM")) {
                 Folder folder = getFolderByName(store, folderName);
                 if (folder != null && folder.exists()) {
                     folder.open(Folder.READ_ONLY);
@@ -766,11 +911,10 @@ public class MailService {
             conversation.setHasAttachments(hasAttachments);
             conversation.setPreview(allMessages.get(allMessages.size() - 1).getPreview());
 
-            // Convert EmailDetailDTO to EmailHeaderDTO for the response
-            List<EmailHeaderDTO> headers = allMessages.stream()
-                .map(this::convertDetailToHeader)
-                .collect(Collectors.toList());
-            conversation.setMessages(headers);
+            // Set full message details (including body content)
+            conversation.setMessages(allMessages);
+
+            System.out.println("✅ Conversation thread loaded with " + allMessages.size() + " messages including body content");
 
             return conversation;
 
@@ -811,23 +955,38 @@ public class MailService {
                 throw new RuntimeException("User not authenticated or connection lost");
             }
 
-            // Search for messages across folders
-            for (String folderName : Arrays.asList("INBOX", "SENT", "DRAFTS", "TRASH")) {
+            // Use specific folder from request, or search all folders if not specified
+            List<String> foldersToSearch;
+            if (request.getFolder() != null && !request.getFolder().trim().isEmpty()) {
+                foldersToSearch = Arrays.asList(request.getFolder());
+            } else {
+                foldersToSearch = Arrays.asList("INBOX", "SENT", "DRAFTS", "TRASH", "STARRED", "IMPORTANT", "SPAM");
+            }
+
+            int processedCount = 0;
+            for (String folderName : foldersToSearch) {
                 Folder folder = getFolderByName(store, folderName);
                 if (folder != null && folder.exists()) {
                     folder.open(Folder.READ_WRITE);
 
                     Message[] messages = folder.getMessages();
                     for (Message message : messages) {
-                        String messageId = getMessageId(message);
-                        if (request.getMessageIds().contains(messageId)) {
+                        // Convert to DTO to get threadId (frontend sends threadIds, not Message-IDs)
+                        EmailHeaderDTO headerDTO = convertToEmailHeaderDTOWithThreading(message);
+                        if (headerDTO != null && request.getMessageIds().contains(headerDTO.getThreadId())) {
                             performAction(message, request.getAction());
+                            processedCount++;
+                            System.out.println("Performed action " + request.getAction() + " on thread: " + headerDTO.getThreadId() + " in folder: " + folderName);
                         }
                     }
 
-                    folder.close(true); // Expunge changes
+                    // Important: Expunge changes to actually delete messages
+                    folder.close(true);
+                    System.out.println("Processed " + processedCount + " messages in folder: " + folderName);
                 }
             }
+
+            System.out.println("✅ Total messages processed: " + processedCount + " out of " + request.getMessageIds().size() + " requested");
 
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to perform email actions: " + e.getMessage(), e);
@@ -1109,24 +1268,6 @@ public class MailService {
     }
 
     /**
-     * Convert EmailDetailDTO to EmailHeaderDTO
-     */
-    private EmailHeaderDTO convertDetailToHeader(EmailDetailDTO detail) {
-        EmailHeaderDTO header = new EmailHeaderDTO();
-        header.setMessageId(detail.getMessageId());
-        header.setFrom(detail.getFrom());
-        header.setSubject(detail.getSubject());
-        header.setDate(detail.getDate());
-        header.setUnread(detail.isUnread());
-        header.setHasAttachments(detail.isHasAttachments());
-        header.setPreview(detail.getPreview());
-        header.setThreadId(detail.getThreadId());
-        header.setInReplyTo(detail.getInReplyTo());
-        header.setReferences(detail.getReferences());
-        return header;
-    }
-
-    /**
      * Get message ID from message
      */
     private String getMessageId(Message message) {
@@ -1161,11 +1302,126 @@ public class MailService {
                     // For now, just mark as archived (could move to Archive folder in future)
                     message.setFlag(Flags.Flag.USER, true);
                     break;
+                case STAR:
+                    copyMessageToFolder(message, "STARRED");
+                    message.setFlag(Flags.Flag.FLAGGED, true); // Also set IMAP FLAGGED flag
+                    break;
+                case UNSTAR:
+                    removeMessageFromFolder(message, "STARRED");
+                    message.setFlag(Flags.Flag.FLAGGED, false);
+                    break;
+                case MARK_IMPORTANT:
+                    copyMessageToFolder(message, "IMPORTANT");
+                    break;
+                case UNMARK_IMPORTANT:
+                    removeMessageFromFolder(message, "IMPORTANT");
+                    break;
+                case MOVE_TO_SPAM:
+                    moveMessageToFolder(message, "SPAM");
+                    break;
                 default:
                     break;
             }
         } catch (MessagingException e) {
             System.err.println("Error performing action on message: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Copy message to a specific folder (for starring, marking important, etc.)
+     */
+    private void copyMessageToFolder(Message message, String targetFolderName) throws MessagingException {
+        try {
+            Store store = message.getFolder().getStore();
+            Folder targetFolder = getFolderByName(store, targetFolderName);
+
+            if (targetFolder == null) {
+                System.err.println("Target folder " + targetFolderName + " not found");
+                return;
+            }
+
+            // Open target folder for writing
+            if (!targetFolder.isOpen()) {
+                targetFolder.open(Folder.READ_WRITE);
+            }
+
+            // Copy message to target folder
+            Message[] messagesToCopy = {message};
+            message.getFolder().copyMessages(messagesToCopy, targetFolder);
+
+            System.out.println("Message copied to " + targetFolderName + " folder successfully");
+
+        } catch (MessagingException e) {
+            System.err.println("Error copying message to " + targetFolderName + ": " + e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Move message to a specific folder (for spam, etc.)
+     */
+    private void moveMessageToFolder(Message message, String targetFolderName) throws MessagingException {
+        try {
+            Store store = message.getFolder().getStore();
+            Folder targetFolder = getFolderByName(store, targetFolderName);
+
+            if (targetFolder == null) {
+                System.err.println("Target folder " + targetFolderName + " not found");
+                return;
+            }
+
+            // Open target folder for writing
+            if (!targetFolder.isOpen()) {
+                targetFolder.open(Folder.READ_WRITE);
+            }
+
+            // Copy message to target folder
+            Message[] messagesToCopy = {message};
+            message.getFolder().copyMessages(messagesToCopy, targetFolder);
+
+            // Mark original message as deleted (this will remove it from source folder when expunged)
+            message.setFlag(Flags.Flag.DELETED, true);
+
+            System.out.println("Message moved to " + targetFolderName + " folder successfully");
+
+        } catch (MessagingException e) {
+            System.err.println("Error moving message to " + targetFolderName + ": " + e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Remove message from a specific folder (for unstarring, unmarking important, etc.)
+     */
+    private void removeMessageFromFolder(Message message, String sourceFolderName) throws MessagingException {
+        try {
+            Store store = message.getFolder().getStore();
+            Folder sourceFolder = getFolderByName(store, sourceFolderName);
+
+            if (sourceFolder == null || !sourceFolder.exists()) {
+                System.err.println("Source folder " + sourceFolderName + " not found");
+                return;
+            }
+
+            // Get message ID to find in target folder
+            String messageId = getMessageId(message);
+
+            sourceFolder.open(Folder.READ_WRITE);
+            Message[] messages = sourceFolder.getMessages();
+
+            // Find and delete the message in the source folder
+            for (Message msg : messages) {
+                if (getMessageId(msg).equals(messageId)) {
+                    msg.setFlag(Flags.Flag.DELETED, true);
+                    System.out.println("Message removed from " + sourceFolderName + " folder");
+                    break;
+                }
+            }
+
+            sourceFolder.close(true); // Expunge
+
+        } catch (MessagingException e) {
+            System.err.println("Error removing message from " + sourceFolderName + ": " + e.getMessage());
         }
     }
 
@@ -1438,7 +1694,10 @@ public class MailService {
                 throw new RuntimeException("User not authenticated or connection lost");
             }
 
-            Folder draftsFolder = store.getFolder("DRAFTS");
+            Folder draftsFolder = getFolderByName(store, "DRAFTS");
+            if (draftsFolder == null) {
+                throw new RuntimeException("DRAFTS folder not found and could not be created");
+            }
             draftsFolder.open(Folder.READ_ONLY);
 
             // Search for the draft by message ID
@@ -1478,9 +1737,9 @@ public class MailService {
                 draft.setBcc(bccList);
             }
 
-            // Extract content using existing method
-            String content = extractPreview(message); // Use existing method
-            if (message.isMimeType("text/html")) {
+            // Extract full content (not preview) for editing
+            String content = extractFullContent(message);
+            if (message.isMimeType("text/html") || content.contains("<")) {
                 draft.setHtmlContent(content);
             } else {
                 draft.setTextContent(content);
@@ -1519,7 +1778,10 @@ public class MailService {
                 throw new RuntimeException("User not authenticated or connection lost");
             }
 
-            Folder draftsFolder = store.getFolder("DRAFTS");
+            Folder draftsFolder = getFolderByName(store, "DRAFTS");
+            if (draftsFolder == null) {
+                throw new RuntimeException("DRAFTS folder not found and could not be created");
+            }
             draftsFolder.open(Folder.READ_WRITE);
 
             // Create new draft message using JavaMailSender
@@ -1599,7 +1861,10 @@ public class MailService {
                 throw new RuntimeException("User not authenticated or connection lost");
             }
 
-            Folder draftsFolder = store.getFolder("DRAFTS");
+            Folder draftsFolder = getFolderByName(store, "DRAFTS");
+            if (draftsFolder == null) {
+                throw new RuntimeException("DRAFTS folder not found and could not be created");
+            }
             draftsFolder.open(Folder.READ_WRITE);
 
             MimeMessage message = javaMailSender.createMimeMessage();
@@ -1664,6 +1929,105 @@ public class MailService {
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to save reply draft: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Delete draft by message ID
+     */
+    public void deleteDraft(String userEmail, String messageId) {
+        try {
+            Store store = getUserStore(userEmail);
+            if (store == null || !store.isConnected()) {
+                throw new RuntimeException("User not authenticated or connection lost");
+            }
+
+            Folder draftsFolder = getFolderByName(store, "DRAFTS");
+            if (draftsFolder == null) {
+                throw new RuntimeException("DRAFTS folder not found and could not be created");
+            }
+            draftsFolder.open(Folder.READ_WRITE);
+
+            // Search for the draft by message ID
+            SearchTerm term = new MessageIDTerm(messageId);
+            Message[] messages = draftsFolder.search(term);
+
+            if (messages.length == 0) {
+                System.out.println("Draft not found with ID: " + messageId);
+                draftsFolder.close(false);
+                return; // Don't throw error if draft not found
+            }
+
+            // Delete the message
+            messages[0].setFlag(Flags.Flag.DELETED, true);
+            draftsFolder.expunge(); // Permanently remove deleted messages
+
+            draftsFolder.close(false);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete draft: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Bulk delete drafts - more efficient than deleting one by one
+     */
+    public void bulkDeleteDrafts(String userEmail, List<String> messageIds) {
+        try {
+            Store store = getUserStore(userEmail);
+            if (store == null || !store.isConnected()) {
+                throw new RuntimeException("User not authenticated or connection lost");
+            }
+
+            Folder draftsFolder = getFolderByName(store, "DRAFTS");
+            if (draftsFolder == null) {
+                throw new RuntimeException("DRAFTS folder not found and could not be created");
+            }
+            draftsFolder.open(Folder.READ_WRITE);
+
+            int deletedCount = 0;
+            // Get all messages in drafts folder
+            Message[] allMessages = draftsFolder.getMessages();
+
+            System.out.println("=== BULK DELETE DRAFTS ===");
+            System.out.println("Total messages in DRAFTS folder: " + allMessages.length);
+            System.out.println("Message IDs to delete: " + messageIds);
+
+            // Mark matching messages for deletion
+            for (Message message : allMessages) {
+                try {
+                    String[] msgIdHeaders = message.getHeader("Message-ID");
+                    if (msgIdHeaders == null || msgIdHeaders.length == 0) {
+                        System.out.println("Message has no Message-ID header, skipping");
+                        continue;
+                    }
+
+                    String msgId = msgIdHeaders[0];
+                    String cleanMsgId = msgId.replaceAll("[<>]", "").trim();
+
+                    System.out.println("Checking message ID: " + cleanMsgId);
+
+                    // Check both original and cleaned versions
+                    if (messageIds.contains(msgId) || messageIds.contains(cleanMsgId)) {
+                        message.setFlag(Flags.Flag.DELETED, true);
+                        deletedCount++;
+                        System.out.println("Marked for deletion: " + cleanMsgId);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error processing message: " + e.getMessage());
+                }
+            }
+
+            // Expunge all deleted messages at once
+            if (deletedCount > 0) {
+                draftsFolder.expunge();
+                System.out.println("Bulk deleted " + deletedCount + " drafts");
+            }
+
+            draftsFolder.close(false);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to bulk delete drafts: " + e.getMessage(), e);
         }
     }
 

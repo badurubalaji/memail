@@ -1,0 +1,361 @@
+
+> memail-frontend@1.0.0 test
+> ng test --watch=false --browsers=ChromeHeadless
+
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m                           [2m | [22m[1mNames[22m                                      [2m | [22m [1mRaw size[22m
+[32mchunk-OPX3VAOC.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m2.29 MB[39m[2m | [22m
+[32mchunk-5J7L5LTE.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m1.81 MB[39m[2m | [22m
+[32mpolyfills.js[39m                                  [2m | [22m[2mpolyfills[22m                                  [2m | [22m  [36m1.03 MB[39m[2m | [22m
+[32mspec-mail-list.component.spec.js[39m              [2m | [22m[2mspec-mail-list.component.spec[22m              [2m | [22m[36m303.89 kB[39m[2m | [22m
+[32mchunk-BYG5IG2P.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m[36m235.33 kB[39m[2m | [22m
+[32mchunk-SH23LB75.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m[36m208.24 kB[39m[2m | [22m
+[32mstyles.css[39m                                    [2m | [22m[2mstyles[22m                                     [2m | [22m[36m152.96 kB[39m[2m | [22m
+[32mchunk-K4MTHANB.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m [36m96.33 kB[39m[2m | [22m
+[32mchunk-NP2HTBNW.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m [36m71.67 kB[39m[2m | [22m
+[32mjasmine-cleanup-1.js[39m                          [2m | [22m[2mjasmine-cleanup-1[22m                          [2m | [22m [36m67.20 kB[39m[2m | [22m
+[32mtest_main.js[39m                                  [2m | [22m[2mtest_main[22m                                  [2m | [22m [36m21.84 kB[39m[2m | [22m
+[32mspec-enhanced-compose.component.spec.js[39m       [2m | [22m[2mspec-enhanced-compose.component.spec[22m       [2m | [22m [36m16.92 kB[39m[2m | [22m
+[32mspec-mail.service.spec.js[39m                     [2m | [22m[2mspec-mail.service.spec[22m                     [2m | [22m [36m14.55 kB[39m[2m | [22m
+[32mspec-auth.service.spec.js[39m                     [2m | [22m[2mspec-auth.service.spec[22m                     [2m | [22m [36m12.73 kB[39m[2m | [22m
+[32mchunk-SARAW3Q2.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m [36m11.18 kB[39m[2m | [22m
+[32mspec-auth-error.interceptor.functional.spec.js[39m[2m | [22m[2mspec-auth-error.interceptor.functional.spec[22m[2m | [22m [36m10.59 kB[39m[2m | [22m
+[32mchunk-T3IFMQHC.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m9.99 kB[39m[2m | [22m
+[32mspec-websocket.service.spec.js[39m                [2m | [22m[2mspec-websocket.service.spec[22m                [2m | [22m  [36m9.82 kB[39m[2m | [22m
+[32mchunk-PZOY7PPE.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m3.69 kB[39m[2m | [22m
+[32mchunk-6TRXNEZQ.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m  [36m3.45 kB[39m[2m | [22m
+[32mspec-app.spec.js[39m                              [2m | [22m[2mspec-app.spec[22m                              [2m | [22m  [36m1.75 kB[39m[2m | [22m
+[32mchunk-GPLQS2EY.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m[36m934 bytes[39m[2m | [22m
+[32mjasmine-cleanup-0.js[39m                          [2m | [22m[2mjasmine-cleanup-0[22m                          [2m | [22m[36m519 bytes[39m[2m | [22m
+[32mchunk-EU3KYQLM.js[39m                             [2m | [22m[2m-[22m                                          [2m | [22m[36m480 bytes[39m[2m | [22m
+
+[1m [22m                                             [2m | [22m[1mInitial total[22m                              [2m | [22m  [1m6.38 MB[22m
+
+[1mLazy chunk files[22m                              [2m | [22m[1mNames[22m                                      [2m | [22m [1mRaw size[22m
+[32mchunk-PNEWODL4.js[39m                             [2m | [22m[2mngx-quill-quill-CUw8Q_m0[22m                   [2m | [22m[36m487.23 kB[39m[2m | [22m
+
+Application bundle generation complete. [4.815 seconds] - 2025-10-04T08:37:49.458Z
+
+[32m04 10 2025 14:07:49.650:INFO [karma-server]: [39mKarma v6.4.4 server started at http://localhost:9876/
+[32m04 10 2025 14:07:49.651:INFO [launcher]: [39mLaunching browsers ChromeHeadless with concurrency unlimited
+[32m04 10 2025 14:07:49.664:INFO [launcher]: [39mStarting browser ChromeHeadless
+[32m04 10 2025 14:07:50.863:INFO [Chrome Headless 140.0.0.0 (Windows 10)]: [39mConnected on socket deP5Q8kkmD6a0z03AAAB with id 47611233
+Chrome Headless 140.0.0.0 (Windows 10): Executed 0 of 160[32m SUCCESS[39m (0 secs / 0 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 1 of 160[32m SUCCESS[39m (0 secs / 0.017 secs)
+[1A[2KLOG: [36m'API returned 401 - token may be invalid. Consider re-authenticating.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 1 of 160[32m SUCCESS[39m (0 secs / 0.017 secs)
+LOG: 'API returned 401 - token may be invalid. Consider re-authenticating.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 2 of 160[32m SUCCESS[39m (0 secs / 0.022 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (401): Authentication failed. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 2 of 160[32m SUCCESS[39m (0 secs / 0.022 secs)
+LOG: 'Critical authentication error detected (401): Authentication failed. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 3 of 160[32m SUCCESS[39m (0 secs / 0.025 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (401): Authentication failed. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 3 of 160[32m SUCCESS[39m (0 secs / 0.025 secs)
+LOG: 'Critical authentication error detected (401): Authentication failed. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 4 of 160[32m SUCCESS[39m (0 secs / 0.028 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (500): User not authenticated. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 4 of 160[32m SUCCESS[39m (0 secs / 0.028 secs)
+LOG: 'Critical authentication error detected (500): User not authenticated. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 5 of 160[32m SUCCESS[39m (0 secs / 0.031 secs)
+[1A[2KLOG: [36m'Network error detected - offline mode. Not logging out.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 5 of 160[32m SUCCESS[39m (0 secs / 0.031 secs)
+LOG: 'Network error detected - offline mode. Not logging out.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 6 of 160[32m SUCCESS[39m (0 secs / 0.033 secs)
+[1A[2KLOG: [36m'Network error detected - offline mode. Not logging out.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 6 of 160[32m SUCCESS[39m (0 secs / 0.033 secs)
+LOG: 'Network error detected - offline mode. Not logging out.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 7 of 160[32m SUCCESS[39m (0 secs / 0.035 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 8 of 160[32m SUCCESS[39m (0 secs / 0.038 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 9 of 160[32m SUCCESS[39m (0 secs / 0.042 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (401): Authentication failed. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 9 of 160[32m SUCCESS[39m (0 secs / 0.042 secs)
+LOG: 'Critical authentication error detected (401): Authentication failed. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 10 of 160[32m SUCCESS[39m (0 secs / 0.044 secs)
+[1A[2KLOG: [36m'Critical authentication error detected (401): Custom authentication error. Logging out user.'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 10 of 160[32m SUCCESS[39m (0 secs / 0.044 secs)
+LOG: 'Critical authentication error detected (401): Custom authentication error. Logging out user.'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 11 of 160[32m SUCCESS[39m (0 secs / 0.049 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 12 of 160[32m SUCCESS[39m (0 secs / 0.051 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 13 of 160[32m SUCCESS[39m (0 secs / 0.053 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 14 of 160[32m SUCCESS[39m (0 secs / 0.055 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 15 of 160[32m SUCCESS[39m (0 secs / 0.056 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 16 of 160[32m SUCCESS[39m (0 secs / 0.057 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 17 of 160[32m SUCCESS[39m (0 secs / 0.067 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 18 of 160[32m SUCCESS[39m (0 secs / 0.071 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 19 of 160[32m SUCCESS[39m (0 secs / 0.181 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 20 of 160[32m SUCCESS[39m (0 secs / 0.201 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 21 of 160[32m SUCCESS[39m (0 secs / 0.22 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 22 of 160[32m SUCCESS[39m (0 secs / 0.24 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 23 of 160[32m SUCCESS[39m (0 secs / 0.259 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 24 of 160[32m SUCCESS[39m (0 secs / 0.284 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 25 of 160[32m SUCCESS[39m (0 secs / 0.303 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 26 of 160[32m SUCCESS[39m (0 secs / 0.325 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 27 of 160[32m SUCCESS[39m (0 secs / 0.34 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 28 of 160[32m SUCCESS[39m (0 secs / 0.354 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 29 of 160[32m SUCCESS[39m (0 secs / 0.377 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 30 of 160[32m SUCCESS[39m (0 secs / 0.393 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 31 of 160[32m SUCCESS[39m (0 secs / 0.409 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 32 of 160[32m SUCCESS[39m (0 secs / 0.434 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 33 of 160[32m SUCCESS[39m (0 secs / 0.459 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 34 of 160[32m SUCCESS[39m (0 secs / 0.481 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 35 of 160[32m SUCCESS[39m (0 secs / 0.52 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Content Editing should prompt for link insertion FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Link inserted', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at src/app/mail/components/enhanced-compose.component.spec.ts:431:29
+	    at Generator.next (<anonymous>)
+	    at fulfilled (chunk-6TRXNEZQ.js:66:24)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 36 of 160[31m (1 FAILED)[39m (0 secs / 0.557 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 37 of 160[31m (1 FAILED)[39m (0 secs / 0.58 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 38 of 160[31m (1 FAILED)[39m (0 secs / 0.6 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 39 of 160[31m (1 FAILED)[39m (0 secs / 0.619 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 40 of 160[31m (1 FAILED)[39m (0 secs / 0.643 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 41 of 160[31m (1 FAILED)[39m (0 secs / 0.67 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 42 of 160[31m (1 FAILED)[39m (0 secs / 0.688 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 43 of 160[31m (1 FAILED)[39m (0 secs / 0.714 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 44 of 160[31m (1 FAILED)[39m (0 secs / 0.735 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 45 of 160[31m (1 FAILED)[39m (0 secs / 0.754 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 46 of 160[31m (1 FAILED)[39m (0 secs / 0.781 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Draft Management should not save draft with no content FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Nothing to save', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:304:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 47 of 160[31m (2 FAILED)[39m (0 secs / 0.817 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Draft Management should auto-save draft after content changes FAILED[39m
+	Expected '' to contain 'saved'.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:322:40)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 48 of 160[31m (3 FAILED)[39m (0 secs / 0.847 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Draft Management should save new draft FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Draft saved successfully', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:274:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 49 of 160[31m (4 FAILED)[39m (0 secs / 0.884 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Draft Management should update existing draft FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Draft updated successfully', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:292:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 50 of 160[31m (5 FAILED)[39m (0 secs / 0.906 secs)
+[1A[2KLOG: [36m'Draft deleted after sending:', 'draft-123'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 50 of 160[31m (5 FAILED)[39m (0 secs / 0.906 secs)
+LOG: 'Draft deleted after sending:', 'draft-123'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 51 of 160[31m (5 FAILED)[39m (0 secs / 0.935 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Send Email should send email successfully FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Email sent successfully!', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:202:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 52 of 160[31m (6 FAILED)[39m (0 secs / 0.962 secs)
+[1A[2KERROR: [36m'Error sending email:', Error: Send failed
+Error: Send failed
+    at http://localhost:9876/base/src/app/mail/components/enhanced-compose.component.spec.ts:220:62
+    at _Observable.init [as _subscribe] (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at _Observable._trySubscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at _Observable.subscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:22:9)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:76:18
+    at new ZoneAwarePromise (http://localhost:9876/base/node_modules/zone.js/fesm2015/zone.js:2701:25)
+    at _Observable.toPromise (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:74:16)
+    at EnhancedComposeComponent2.<anonymous> (http://localhost:9876/base/src/app/mail/components/enhanced-compose.component.ts:1144:51)[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 52 of 160[31m (6 FAILED)[39m (0 secs / 0.962 secs)
+ERROR: 'Error sending email:', Error: Send failed
+Error: Send failed
+    at http://localhost:9876/base/src/app/mail/components/enhanced-compose.component.spec.ts:220:62
+    at _Observable.init [as _subscribe] (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at _Observable._trySubscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at _Observable.subscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:22:9)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:76:18
+    at new ZoneAwarePromise (http://localhost:9876/base/node_modules/zone.js/fesm2015/zone.js:2701:25)
+    at _Observable.toPromise (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:74:16)
+    at EnhancedComposeComponent2.<anonymous> (http://localhost:9876/base/src/app/mail/components/enhanced-compose.component.ts:1144:51)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Send Email should handle send email error FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Failed to send email', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:225:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 53 of 160[31m (7 FAILED)[39m (0 secs / 1.864 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) EnhancedComposeComponent Send Email should not send email without valid recipients FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Please add at least one valid recipient', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/enhanced-compose.component.spec.ts:212:29)
+	    at UserContext.fakeAsyncFn (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 54 of 160[31m (8 FAILED)[39m (0 secs / 1.884 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 55 of 160[31m (8 FAILED)[39m (0 secs / 1.897 secs)
+[1A[2KLOG: [36m'Email unstarred successfully'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 55 of 160[31m (8 FAILED)[39m (0 secs / 1.897 secs)
+LOG: 'Email unstarred successfully'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 56 of 160[31m (8 FAILED)[39m (0 secs / 1.983 secs)
+[1A[2KLOG: [36m'Email starred successfully'[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 56 of 160[31m (8 FAILED)[39m (0 secs / 1.983 secs)
+LOG: 'Email starred successfully'
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 57 of 160[31m (8 FAILED)[39m (0 secs / 1.995 secs)
+[1A[2KERROR: [36m'Error toggling star:', Error: Star failed
+Error: Star failed
+    at http://localhost:9876/base/src/app/mail/components/mail-list.component.spec.ts:315:63
+    at _Observable.init [as _subscribe] (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at _Observable._trySubscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at _Observable.subscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:22:9)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/operators/takeUntil.js:8:38
+    at SafeSubscriber.<anonymous> (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 57 of 160[31m (8 FAILED)[39m (0 secs / 1.995 secs)
+ERROR: 'Error toggling star:', Error: Star failed
+Error: Star failed
+    at http://localhost:9876/base/src/app/mail/components/mail-list.component.spec.ts:315:63
+    at _Observable.init [as _subscribe] (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/observable/throwError.js:5:51)
+    at _Observable._trySubscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:37:25)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:31:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+    at _Observable.subscribe (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:22:9)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/operators/takeUntil.js:8:38
+    at SafeSubscriber.<anonymous> (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/lift.js:10:28)
+    at http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/Observable.js:26:30
+    at errorContext (http://localhost:9876/base/node_modules/rxjs/dist/esm/internal/util/errorContext.js:19:9)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) MailListComponent Star Functionality should revert star state on error FAILED[39m
+	Expected true to be false.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/mail-list.component.spec.ts:319:38)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Failed to update star status', 'Close', <jasmine.any(Object)> ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.<anonymous> (src/app/mail/components/mail-list.component.spec.ts:320:29)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at _ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 58 of 160[31m (9 FAILED)[39m (0 secs / 2.01 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 59 of 160[31m (9 FAILED)[39m (0 secs / 2.037 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 60 of 160[31m (9 FAILED)[39m (0 secs / 2.051 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 61 of 160[31m (9 FAILED)[39m (0 secs / 2.068 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 62 of 160[31m (9 FAILED)[39m (0 secs / 2.081 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 63 of 160[31m (9 FAILED)[39m (0 secs / 2.104 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 64 of 160[31m (9 FAILED)[39m (0 secs / 2.118 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 65 of 160[31m (9 FAILED)[39m (0 secs / 2.134 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 66 of 160[31m (9 FAILED)[39m (0 secs / 2.155 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 67 of 160[31m (9 FAILED)[39m (0 secs / 2.166 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 68 of 160[31m (9 FAILED)[39m (0 secs / 2.181 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 69 of 160[31m (9 FAILED)[39m (0 secs / 2.192 secs)
+[1A[2KERROR: [36m'Error loading conversations:', Object{status: 500, error: Object{message: 'Server error'}}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 69 of 160[31m (9 FAILED)[39m (0 secs / 2.192 secs)
+ERROR: 'Error loading conversations:', Object{status: 500, error: Object{message: 'Server error'}}
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) MailListComponent loadConversations() should handle error when loading conversations FAILED[39m
+	Expected spy MatSnackBar.open to have been called.
+	    at <Jasmine>
+	    at src/app/mail/components/mail-list.component.spec.ts:158:31
+	    at timer (node_modules/zone.js/fesm2015/zone.js:1809:37)
+	    at _ZoneDelegate.invokeTask (node_modules/zone.js/fesm2015/zone.js:431:33)
+	    at _ProxyZoneSpec.onInvokeTask (node_modules/zone.js/fesm2015/zone-testing.js:2163:39)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 70 of 160[31m (10 FAILED)[39m (0 secs / 2.199 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 71 of 160[31m (10 FAILED)[39m (0 secs / 2.204 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 72 of 160[31m (10 FAILED)[39m (0 secs / 2.208 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 73 of 160[31m (10 FAILED)[39m (0 secs / 2.212 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 74 of 160[31m (10 FAILED)[39m (0 secs / 2.223 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 75 of 160[31m (10 FAILED)[39m (0 secs / 2.239 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 76 of 160[31m (10 FAILED)[39m (0 secs / 2.244 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 77 of 160[31m (10 FAILED)[39m (0 secs / 2.248 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 78 of 160[31m (10 FAILED)[39m (0 secs / 2.252 secs)
+[1A[2KLOG: [36m'Mail list received notification:', Object{type: 'NEW_EMAIL', folder: 'INBOX', messageId: 'new-msg'}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 78 of 160[31m (10 FAILED)[39m (0 secs / 2.252 secs)
+LOG: 'Mail list received notification:', Object{type: 'NEW_EMAIL', folder: 'INBOX', messageId: 'new-msg'}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 79 of 160[31m (10 FAILED)[39m (0 secs / 2.262 secs)
+[1A[2KLOG: [36m'Mail list received notification:', Object{type: 'NEW_EMAIL', folder: 'SENT', messageId: 'new-msg'}[39m
+Chrome Headless 140.0.0.0 (Windows 10): Executed 79 of 160[31m (10 FAILED)[39m (0 secs / 2.262 secs)
+LOG: 'Mail list received notification:', Object{type: 'NEW_EMAIL', folder: 'SENT', messageId: 'new-msg'}
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 80 of 160[31m (10 FAILED)[39m (0 secs / 2.274 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) ERROR[39m
+  An error was thrown in afterAll
+  TypeError: Cannot read properties of undefined (reading 'pipe')
+      at EnhancedComposeComponent2.performAutoSave (src/app/mail/components/enhanced-compose.component.ts:1031:20)
+      at Object.next (src/app/mail/components/enhanced-compose.component.ts:853:12)
+      at ConsumerObserver.next (node_modules/rxjs/dist/esm/internal/Subscriber.js:91:33)
+      at SafeSubscriber._next (node_modules/rxjs/dist/esm/internal/Subscriber.js:60:26)
+      at SafeSubscriber.next (node_modules/rxjs/dist/esm/internal/Subscriber.js:31:18)
+      at emit (node_modules/rxjs/dist/esm/internal/operators/debounceTime.js:15:28)
+      at AsyncAction.emitWhenIdle (node_modules/rxjs/dist/esm/internal/operators/debounceTime.js:26:13)
+      at AsyncAction._execute (node_modules/rxjs/dist/esm/internal/scheduler/AsyncAction.js:56:18)
+      at AsyncAction.execute (node_modules/rxjs/dist/esm/internal/scheduler/AsyncAction.js:44:28)
+      at AsyncScheduler.flush (node_modules/rxjs/dist/esm/internal/scheduler/AsyncScheduler.js:17:33)
+Chrome Headless 140.0.0.0 (Windows 10): Executed 80 of 160[31m (10 FAILED)[39m[31m ERROR[39m (0 secs / 2.274 secs)
+Chrome Headless 140.0.0.0 (Windows 10) ERROR
+  An error was thrown in afterAll
+  TypeError: Cannot read properties of undefined (reading 'pipe')
+      at EnhancedComposeComponent2.performAutoSave (src/app/mail/components/enhanced-compose.component.ts:1031:20)
+      at Object.next (src/app/mail/components/enhanced-compose.component.ts:853:12)
+      at ConsumerObserver.next (node_modules/rxjs/dist/esm/internal/Subscriber.js:91:33)
+      at SafeSubscriber._next (node_modules/rxjs/dist/esm/internal/Subscriber.js:60:26)
+      at SafeSubscriber.next (node_modules/rxjs/dist/esm/internal/Subscriber.js:31:18)
+      at emit (node_modules/rxjs/dist/esm/internal/operators/debounceTime.js:15:28)
+      at AsyncAction.emitWhenIdle (node_modules/rxjs/dist/esm/internal/operators/debounceTime.js:26:13)
+      at AsyncAction._execute (node_modules/rxjs/dist/esm/internal/scheduler/AsyncAction.js:56:18)
+      at AsyncAction.execute (node_modules/rxjs/dist/esm/internal/scheduler/AsyncAction.js:44:28)
+      at AsyncScheduler.flush (node_modules/rxjs/dist/esm/internal/scheduler/AsyncScheduler.js:17:33)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 80 of 160[31m (10 FAILED)[39m[31m ERROR[39m (2.461 secs / 2.274 secs)
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 81 of 160[31m (10 FAILED)[39m[31m ERROR[39m (2.461 secs / 2.29 secs)
+[1A[2K[31mChrome Headless 140.0.0.0 (Windows 10) ERROR[39m
+  Disconnected , because no message in 30000 ms.
+Chrome Headless 140.0.0.0 (Windows 10): Executed 81 of 160[31m (10 FAILED)[39m[31m DISCONNECTED[39m (32.48 secs / 2.29 secs)
+Chrome Headless 140.0.0.0 (Windows 10) ERROR
+  Disconnected , because no message in 30000 ms.
+[1A[2KChrome Headless 140.0.0.0 (Windows 10): Executed 81 of 160[31m (10 FAILED)[39m[31m DISCONNECTED[39m (32.48 secs / 2.29 secs)
+node:internal/webstreams/readablestream:1077
+      throw new ERR_INVALID_STATE.TypeError('Controller is already closed');
+      ^
+
+TypeError [ERR_INVALID_STATE]: Invalid state: Controller is already closed
+    at ReadableStreamDefaultController.enqueue (node:internal/webstreams/readablestream:1077:13)
+    at C:\Users\badur\WorkSpace\javaProjects\memail\frontend\node_modules\@angular\build\src\builders\karma\application_builder.js:266:28
+    at removeAllListeners (C:\Users\badur\WorkSpace\javaProjects\memail\frontend\node_modules\karma\lib\server.js:468:9)
+    at C:\Users\badur\WorkSpace\javaProjects\memail\frontend\node_modules\karma\lib\server.js:475:9
+    at Server.close (node:net:2358:9)
+    at Object.onceWrapper (node:events:632:28)
+    at Server.emit (node:events:518:28)
+    at emitCloseNT (node:net:2418:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'ERR_INVALID_STATE'
+}
+
+Node.js v22.15.0

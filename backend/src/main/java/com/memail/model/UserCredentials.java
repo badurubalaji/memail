@@ -1,0 +1,99 @@
+package com.memail.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+/**
+ * Entity to store encrypted IMAP credentials for persistent connections
+ * Allows server restart without losing user sessions
+ */
+@Entity
+@Table(name = "user_credentials")
+public class UserCredentials {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+
+    /**
+     * Encrypted IMAP password using AES-256 encryption
+     * Encrypted with application secret key for security
+     */
+    @Column(name = "encrypted_password", nullable = false, length = 500)
+    private String encryptedPassword;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "last_connection_at")
+    private LocalDateTime lastConnectionAt;
+
+    public UserCredentials() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public UserCredentials(String email, String encryptedPassword) {
+        this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getLastConnectionAt() {
+        return lastConnectionAt;
+    }
+
+    public void setLastConnectionAt(LocalDateTime lastConnectionAt) {
+        this.lastConnectionAt = lastConnectionAt;
+    }
+}

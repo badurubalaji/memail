@@ -50,6 +50,16 @@ import { LabelManagementComponent } from '../label-management/label-management.c
           <span matListItemTitle>Inbox</span>
         </a>
 
+        <a mat-list-item routerLink="/starred" routerLinkActive="active">
+          <mat-icon matListItemIcon>star</mat-icon>
+          <span matListItemTitle>Starred</span>
+        </a>
+
+        <a mat-list-item routerLink="/important" routerLinkActive="active">
+          <mat-icon matListItemIcon>label_important</mat-icon>
+          <span matListItemTitle>Important</span>
+        </a>
+
         <a mat-list-item routerLink="/sent" routerLinkActive="active">
           <mat-icon matListItemIcon>send</mat-icon>
           <span matListItemTitle>Sent</span>
@@ -58,6 +68,11 @@ import { LabelManagementComponent } from '../label-management/label-management.c
         <a mat-list-item routerLink="/drafts" routerLinkActive="active">
           <mat-icon matListItemIcon>drafts</mat-icon>
           <span matListItemTitle>Drafts</span>
+        </a>
+
+        <a mat-list-item routerLink="/spam" routerLinkActive="active">
+          <mat-icon matListItemIcon>report</mat-icon>
+          <span matListItemTitle>Spam</span>
         </a>
 
         <a mat-list-item routerLink="/trash" routerLinkActive="active">

@@ -12,7 +12,7 @@ public class ConversationDTO {
     private boolean hasUnread;
     private boolean hasAttachments;
     private String preview;
-    private List<EmailHeaderDTO> messages;
+    private List<EmailDetailDTO> messages;  // Changed from EmailHeaderDTO to EmailDetailDTO to include body
 
     // Constructors
     public ConversationDTO() {}
@@ -95,11 +95,11 @@ public class ConversationDTO {
         this.preview = preview;
     }
 
-    public List<EmailHeaderDTO> getMessages() {
+    public List<EmailDetailDTO> getMessages() {  // Changed return type
         return messages;
     }
 
-    public void setMessages(List<EmailHeaderDTO> messages) {
+    public void setMessages(List<EmailDetailDTO> messages) {  // Changed parameter type
         this.messages = messages;
     }
 }

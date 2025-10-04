@@ -60,10 +60,22 @@ public class EmailController {
     @GetMapping("/folders")
     public ResponseEntity<?> getFolders(Authentication authentication) {
         try {
-            // For Milestone 1, return a simple static list
-            // This will be expanded in later milestones
+            String email = (String) authentication.getPrincipal();
+
+            // Initialize default folders if they don't exist
+            mailService.initializeDefaultFolders(email);
+
+            // Return all available folders
             return ResponseEntity.ok(Map.of(
-                "folders", new String[]{"INBOX", "SENT", "DRAFTS", "TRASH"}
+                "folders", new String[]{
+                    "INBOX",
+                    "SENT",
+                    "DRAFTS",
+                    "TRASH",
+                    "STARRED",
+                    "IMPORTANT",
+                    "SPAM"
+                }
             ));
         } catch (Exception e) {
             return ResponseEntity.status(500)
@@ -371,6 +383,64 @@ public class EmailController {
             return ResponseEntity.status(500)
                 .body(Map.of(
                     "error", "Failed to update draft",
+                    "message", e.getMessage()
+                ));
+        }
+    }
+
+    /**
+     * Delete draft
+     */
+    @DeleteMapping("/drafts/{messageId}")
+    public ResponseEntity<?> deleteDraft(
+            @PathVariable String messageId,
+            Authentication authentication) {
+
+        try {
+            String email = (String) authentication.getPrincipal();
+            mailService.deleteDraft(email, messageId);
+
+            return ResponseEntity.ok(Map.of(
+                "message", "Draft deleted successfully",
+                "messageId", messageId
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                .body(Map.of(
+                    "error", "Failed to delete draft",
+                    "message", e.getMessage()
+                ));
+        }
+    }
+
+    /**
+     * Bulk delete drafts
+     */
+    @PostMapping("/drafts/bulk-delete")
+    public ResponseEntity<?> bulkDeleteDrafts(
+            @RequestBody Map<String, Object> request,
+            Authentication authentication) {
+
+        try {
+            String email = (String) authentication.getPrincipal();
+            @SuppressWarnings("unchecked")
+            List<String> messageIds = (List<String>) request.get("messageIds");
+
+            if (messageIds == null || messageIds.isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("error", "No message IDs provided"));
+            }
+
+            mailService.bulkDeleteDrafts(email, messageIds);
+
+            return ResponseEntity.ok(Map.of(
+                "message", "Drafts deleted successfully",
+                "count", messageIds.size()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                .body(Map.of(
+                    "error", "Failed to delete drafts",
                     "message", e.getMessage()
                 ));
         }
