@@ -297,11 +297,12 @@ public class EmailController {
                 draftRequest.setAttachments(attachmentList);
             }
 
-            // Save the draft
-            mailService.saveDraft(username, draftRequest);
+            // Save the draft and get the message ID
+            String messageId = mailService.saveDraft(username, draftRequest);
 
             return ResponseEntity.ok(Map.of(
                 "message", "Draft saved successfully",
+                "messageId", messageId != null ? messageId : "",
                 "to", to,
                 "subject", subject
             ));

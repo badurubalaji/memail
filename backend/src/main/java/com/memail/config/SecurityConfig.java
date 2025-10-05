@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .requestMatchers("/ws/**").permitAll()  // Allow WebSocket connections
                 .requestMatchers("/topic/**").permitAll()  // Allow WebSocket topics
                 .requestMatchers("/queue/**").permitAll()  // Allow WebSocket queues
+                .requestMatchers("/admin/**").authenticated()  // Admin endpoints require authentication
                 .requestMatchers("/**").authenticated()
                 .anyRequest().authenticated()
             )

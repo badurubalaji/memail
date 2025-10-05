@@ -50,7 +50,8 @@ export class AuthService {
           this.setToken(response.token);
           const user: User = {
             email: response.email,
-            displayName: response.email.split('@')[0]
+            displayName: response.email.split('@')[0],
+            role: response.role
           };
           this.setUser(user);
           this.currentUserSubject.next(user);
@@ -61,6 +62,14 @@ export class AuthService {
           return throwError(() => error);
         })
       );
+  }
+
+  /**
+   * Check if current user is admin
+   */
+  isAdmin(): boolean {
+    const user = this.getCurrentUser();
+    return user?.role === 'ADMIN';
   }
 
   logout(): void {
@@ -125,5 +134,56 @@ export class AuthService {
     } catch {
       return true;
     }
+  }
+
+  /**
+   * Request password reset - sends email with reset link
+   */
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/password-reset/request`, { email })
+      .pipe(
+        catchError(error => {
+          console.error('Password reset request error:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  /**
+   * Confirm password reset with token
+   */
+  confirmPasswordReset(token: string, newPassword: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/password-reset/confirm`, {
+      token,
+      newPassword
+    }).pipe(
+      catchError(error => {
+        console.error('Password reset confirm error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Change password for logged-in user
+   */
+  changePassword(currentPassword: string, newPassword: string): Observable<any> {
+    const user = this.getCurrentUser();
+    if (!user) {
+      return throwError(() => new Error('User not authenticated'));
+    }
+
+    // For now, use the login endpoint to verify current password, then update
+    // In a production app, you'd have a dedicated change-password endpoint
+    return this.http.post(`${environment.apiUrl}/auth/change-password`, {
+      email: user.email,
+      currentPassword,
+      newPassword
+    }).pipe(
+      catchError(error => {
+        console.error('Password change error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 }

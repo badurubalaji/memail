@@ -34,9 +34,17 @@ public class UserCredentials {
     @Column(name = "last_connection_at")
     private LocalDateTime lastConnectionAt;
 
+    @Column(name = "role", nullable = false, length = 20)
+    private String role = "USER";
+
+    @Column(name = "enabled", nullable = false)
+    private Boolean enabled = true;
+
     public UserCredentials() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.role = "USER";
+        this.enabled = true;
     }
 
     public UserCredentials(String email, String encryptedPassword) {
@@ -95,5 +103,27 @@ public class UserCredentials {
 
     public void setLastConnectionAt(LocalDateTime lastConnectionAt) {
         this.lastConnectionAt = lastConnectionAt;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public boolean isAdmin() {
+        return "ADMIN".equals(role);
     }
 }

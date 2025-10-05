@@ -8,6 +8,28 @@ export const routes: Routes = [
       .then(m => m.LoginComponent)
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./auth/components/forgot-password.component')
+      .then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./auth/components/reset-password.component')
+      .then(m => m.ResetPasswordComponent)
+  },
+  {
+    path: 'change-password',
+    loadComponent: () => import('./auth/components/change-password.component')
+      .then(m => m.ChangePasswordComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile',
+    loadComponent: () => import('./auth/components/profile.component')
+      .then(m => m.ProfileComponent),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '',
     loadComponent: () => import('./mail/components/mail-layout.component')
       .then(m => m.MailLayoutComponent),
@@ -64,6 +86,11 @@ export const routes: Routes = [
         path: 'compose',
         loadComponent: () => import('./mail/components/enhanced-compose.component')
           .then(m => m.EnhancedComposeComponent)
+      },
+      {
+        path: 'admin/users',
+        loadComponent: () => import('./admin/components/user-management.component')
+          .then(m => m.UserManagementComponent)
       },
       {
         path: 'inbox/:threadId',

@@ -52,6 +52,9 @@ public class MailService {
     @Autowired
     private EncryptionUtil encryptionUtil;
 
+    @Autowired
+    private OptimizedMailService optimizedMailService;
+
     @Value("${mail.imap.host}")
     private String imapHost;
 
@@ -63,6 +66,12 @@ public class MailService {
 
     @Value("${mail.imap.starttls.enable}")
     private boolean imapStartTlsEnable;
+
+    @Value("${james.webadmin.host}")
+    private String jamesWebAdminHost;
+
+    @Value("${james.webadmin.port}")
+    private int jamesWebAdminPort;
 
     // SMTP configuration is now handled by Spring Boot's JavaMailSender
     // No need for separate SMTP configuration here
@@ -135,6 +144,13 @@ public class MailService {
             int endIndex = Math.max(1, messageCount - page * size);
 
             Message[] messages = folder.getMessages(startIndex, endIndex);
+
+            // PERFORMANCE OPTIMIZATION: Use FetchProfile to batch-fetch all headers in ONE network roundtrip
+            // This is CRITICAL - without this, each message would trigger a separate server request
+            long fetchStart = System.currentTimeMillis();
+            optimizedMailService.applyOptimizedFetchProfile(folder, messages);
+            long fetchTime = System.currentTimeMillis() - fetchStart;
+            System.out.println("⚡ FetchProfile completed in " + fetchTime + "ms for " + messages.length + " messages");
 
             // Convert to DTOs and reverse order (newest first)
             List<EmailHeaderDTO> emailHeaders = Arrays.stream(messages)
@@ -467,39 +483,29 @@ public class MailService {
     }
 
     /**
-     * Check if message has attachments
+     * Check if message has attachments - OPTIMIZED VERSION
+     * Uses Content-Type header only, does NOT load message content
      */
     private boolean hasAttachments(Message message) {
         try {
-            if (message.isMimeType("multipart/*")) {
-                Multipart multipart = (Multipart) message.getContent();
-                for (int i = 0; i < multipart.getCount(); i++) {
-                    BodyPart bodyPart = multipart.getBodyPart(i);
-                    if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
-                        return true;
-                    }
-                }
+            String[] contentType = message.getHeader("Content-Type");
+            if (contentType != null && contentType.length > 0) {
+                String type = contentType[0].toLowerCase();
+                return type.contains("multipart/mixed") || type.contains("multipart/related");
             }
         } catch (Exception e) {
-            // If we can't determine, assume no attachments
+            // Ignore errors
         }
         return false;
     }
 
     /**
-     * Extract preview text from message
+     * Extract preview text from message - LAZY LOADED
+     * Returns empty string for list view, only loads on detail view
      */
     private String extractPreview(Message message) {
-        try {
-            String content = getTextContent(message);
-            if (content != null && !content.isEmpty()) {
-                // Clean up and truncate
-                content = content.replaceAll("\\s+", " ").trim();
-                return content.length() > 100 ? content.substring(0, 100) + "..." : content;
-            }
-        } catch (Exception e) {
-            // If we can't extract content, return empty
-        }
+        // PERFORMANCE: Don't load content for list view
+        // Preview will be loaded lazily when needed
         return "";
     }
 
@@ -1464,7 +1470,7 @@ public class MailService {
     /**
      * Save email as draft in DRAFTS folder
      */
-    public void saveDraft(String userEmail, SendEmailRequestDTO draftRequest) throws MessagingException {
+    public String saveDraft(String userEmail, SendEmailRequestDTO draftRequest) throws MessagingException {
         System.out.println("=== SAVING DRAFT ===");
         System.out.println("User: " + userEmail);
         System.out.println("To: " + draftRequest.getTo());
@@ -1543,7 +1549,16 @@ public class MailService {
             // Save to DRAFTS folder
             draftsFolder.appendMessages(new Message[]{draftMessage});
 
+            // Get the message ID of the saved draft
+            String messageId = draftMessage.getMessageID();
+
+            // Close the folder
+            draftsFolder.close(false);
+
             System.out.println("=== DRAFT SAVED SUCCESSFULLY ===");
+            System.out.println("Draft Message-ID: " + messageId);
+
+            return messageId;
 
         } catch (Exception e) {
             System.err.println("Failed to save draft: " + e.getMessage());
@@ -1770,8 +1785,9 @@ public class MailService {
      */
     public void updateDraft(String userEmail, String messageId, DraftEmailDTO draftData) {
         try {
-            // For now, we'll implement this as saving a new draft and deleting the old one
-            // This is a simplified implementation
+            System.out.println("=== UPDATING DRAFT ===");
+            System.out.println("User: " + userEmail);
+            System.out.println("Draft ID to update: " + messageId);
 
             Store store = getUserStore(userEmail);
             if (store == null || !store.isConnected()) {
@@ -1784,8 +1800,23 @@ public class MailService {
             }
             draftsFolder.open(Folder.READ_WRITE);
 
-            // Create new draft message using JavaMailSender
-            MimeMessage message = javaMailSender.createMimeMessage();
+            // STEP 1: Find and delete the old draft
+            SearchTerm term = new MessageIDTerm(messageId);
+            Message[] existingDrafts = draftsFolder.search(term);
+
+            if (existingDrafts.length > 0) {
+                System.out.println("Found existing draft, marking for deletion");
+                for (Message oldDraft : existingDrafts) {
+                    oldDraft.setFlag(Flags.Flag.DELETED, true);
+                }
+            } else {
+                System.out.println("WARNING: Draft with ID " + messageId + " not found, creating new one");
+            }
+
+            // STEP 2: Create new draft message with updated content
+            Properties props = new Properties();
+            Session session = Session.getDefaultInstance(props);
+            MimeMessage message = new MimeMessage(session);
 
             // Set recipients
             if (draftData.getTo() != null && !draftData.getTo().isEmpty()) {
@@ -1839,12 +1870,15 @@ public class MailService {
             }
 
             message.setSentDate(new Date());
+            message.setFlag(Flags.Flag.DRAFT, true);
 
-            // Save to drafts folder
+            // STEP 3: Save new draft to folder
             draftsFolder.appendMessages(new Message[]{message});
 
-            draftsFolder.close(false);
-            store.close();
+            // STEP 4: Expunge to permanently remove old draft(s)
+            draftsFolder.close(true); // true = expunge deleted messages
+
+            System.out.println("=== DRAFT UPDATED SUCCESSFULLY ===");
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to update draft: " + e.getMessage(), e);
@@ -2079,6 +2113,124 @@ public class MailService {
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to send reply: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Create user in Apache James mail server using WebAdmin API
+     */
+    public boolean createJamesUser(String email, String password) {
+        try {
+            System.out.println("=== CREATING JAMES USER VIA WEBADMIN API ===");
+            System.out.println("Email: " + email);
+            System.out.println("WebAdmin URL: http://" + jamesWebAdminHost + ":" + jamesWebAdminPort);
+
+            String url = String.format("http://%s:%d/users/%s",
+                jamesWebAdminHost, jamesWebAdminPort, email);
+
+            // Use RestTemplate to make HTTP PUT request
+            org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+
+            // Create request body with password
+            java.util.Map<String, String> requestBody = new java.util.HashMap<>();
+            requestBody.put("password", password);
+
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+
+            org.springframework.http.HttpEntity<java.util.Map<String, String>> request =
+                new org.springframework.http.HttpEntity<>(requestBody, headers);
+
+            org.springframework.http.ResponseEntity<String> response =
+                restTemplate.exchange(url, org.springframework.http.HttpMethod.PUT, request, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("✅ User created successfully in James");
+                return true;
+            } else {
+                System.err.println("Failed to create user. Status: " + response.getStatusCode());
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to create James user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Update user password in Apache James mail server using WebAdmin API
+     */
+    public boolean updateJamesUserPassword(String email, String newPassword) {
+        try {
+            System.out.println("=== UPDATING JAMES USER PASSWORD VIA WEBADMIN API ===");
+            System.out.println("Email: " + email);
+
+            String url = String.format("http://%s:%d/users/%s/password",
+                jamesWebAdminHost, jamesWebAdminPort, email);
+
+            // Use RestTemplate to make HTTP PUT request
+            org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+
+            // Create request body with password
+            java.util.Map<String, String> requestBody = new java.util.HashMap<>();
+            requestBody.put("password", newPassword);
+
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+
+            org.springframework.http.HttpEntity<java.util.Map<String, String>> request =
+                new org.springframework.http.HttpEntity<>(requestBody, headers);
+
+            org.springframework.http.ResponseEntity<String> response =
+                restTemplate.exchange(url, org.springframework.http.HttpMethod.PUT, request, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("✅ User password updated successfully in James");
+                return true;
+            } else {
+                System.err.println("Failed to update password. Status: " + response.getStatusCode());
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to update James user password: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Delete user from Apache James mail server using WebAdmin API
+     */
+    public boolean deleteJamesUser(String email) {
+        try {
+            System.out.println("=== DELETING JAMES USER VIA WEBADMIN API ===");
+            System.out.println("Email: " + email);
+
+            String url = String.format("http://%s:%d/users/%s",
+                jamesWebAdminHost, jamesWebAdminPort, email);
+
+            // Use RestTemplate to make HTTP DELETE request
+            org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+
+            org.springframework.http.ResponseEntity<String> response =
+                restTemplate.exchange(url, org.springframework.http.HttpMethod.DELETE, null, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("✅ User deleted successfully from James");
+                return true;
+            } else {
+                System.err.println("Failed to delete user. Status: " + response.getStatusCode());
+                return false;
+            }
+        } catch (org.springframework.web.client.HttpClientErrorException.NotFound e) {
+            // User doesn't exist, which is fine for deletion
+            System.out.println("User not found in James (already deleted or never existed)");
+            return true;
+        } catch (Exception e) {
+            System.err.println("Failed to delete James user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 

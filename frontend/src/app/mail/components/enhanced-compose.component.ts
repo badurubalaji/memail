@@ -15,6 +15,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Subject, debounceTime, Observable, of, firstValueFrom } from 'rxjs';
 import { takeUntil, startWith, map, switchMap, catchError } from 'rxjs/operators';
@@ -75,24 +76,34 @@ interface ComposeDialogData {
     MatTooltipModule,
     MatDividerModule,
     MatMenuModule,
-    QuillModule
+    QuillModule,
+    DragDropModule
   ],
   template: `
-    <div class="compose-container">
+    <div class="compose-container" [class.minimized]="isMinimized" [class.maximized]="isMaximized">
       <!-- Header -->
-      <div class="compose-header">
+      <div class="compose-header" cdkDrag [cdkDragDisabled]="isMaximized" cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
         <div class="header-content">
           <div class="header-title">
             <mat-icon class="compose-icon">edit</mat-icon>
             <span>New Message</span>
           </div>
           <div class="header-actions" *ngIf="isDialogMode()">
+            <button mat-icon-button (click)="toggleMinimize()" matTooltip="{{ isMinimized ? 'Expand' : 'Minimize' }}">
+              <mat-icon>{{ isMinimized ? 'expand_more' : 'minimize' }}</mat-icon>
+            </button>
+            <button mat-icon-button (click)="toggleMaximize()" matTooltip="{{ isMaximized ? 'Restore' : 'Maximize' }}" *ngIf="!isMinimized">
+              <mat-icon>{{ isMaximized ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+            </button>
             <button mat-icon-button (click)="confirmClose()" matTooltip="Close">
               <mat-icon>close</mat-icon>
             </button>
           </div>
         </div>
       </div>
+
+      <!-- Main Content (hidden when minimized) -->
+      <div class="compose-content" *ngIf="!isMinimized">
 
       <!-- Recipients Section -->
       <div class="recipients-section">
@@ -310,7 +321,9 @@ interface ComposeDialogData {
         <mat-icon class="save-icon">{{ autoSaveStatus.includes('Saving') ? 'sync' : 'check' }}</mat-icon>
         {{ autoSaveStatus }}
       </div>
-    </div>
+
+      </div><!-- End compose-content -->
+    </div><!-- End compose-container -->
   `,
   styles: [`
     .compose-container {
@@ -330,6 +343,8 @@ interface ComposeDialogData {
       border-bottom: 1px solid #e8eaed;
       padding: 12px 16px;
       flex-shrink: 0;
+      cursor: move;
+      user-select: none;
     }
 
     .header-content {
@@ -350,6 +365,24 @@ interface ComposeDialogData {
     .compose-icon {
       font-size: 16px;
       color: #5f6368;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .header-actions button {
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+    }
+
+    .header-actions mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
     }
 
     /* Recipients Section */
@@ -530,12 +563,16 @@ interface ComposeDialogData {
       flex-direction: column;
     }
 
-    /* Override Quill styles */
+    /* Override Quill styles - Gmail appearance */
     :host ::ng-deep .ql-toolbar {
       border: none !important;
-      border-bottom: 1px solid #e8eaed !important;
-      background: #fafafa !important;
-      padding: 8px 16px !important;
+      border-bottom: 1px solid #dadce0 !important;
+      background: #f5f5f5 !important;
+      padding: 10px 12px !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 10 !important;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
     }
 
     :host ::ng-deep .ql-container {
@@ -545,17 +582,19 @@ interface ComposeDialogData {
       flex-direction: column !important;
       overflow-y: auto !important;
       max-height: 100% !important;
+      background: white !important;
     }
 
     :host ::ng-deep .ql-editor {
-      padding: 16px !important;
+      padding: 16px 20px !important;
       flex: 1 !important;
       font-size: 14px !important;
       line-height: 1.6 !important;
       color: #202124 !important;
-      font-family: 'Google Sans', Roboto, sans-serif !important;
+      font-family: 'Google Sans', Roboto, Arial, sans-serif !important;
       overflow-y: auto !important;
       max-height: 100% !important;
+      min-height: 250px !important;
     }
 
     :host ::ng-deep .ql-editor.ql-blank::before {
@@ -671,6 +710,30 @@ interface ComposeDialogData {
       font-size: 14px;
     }
 
+    /* Minimize/Maximize states */
+    .compose-container.minimized {
+      height: auto !important;
+    }
+
+    .compose-container.minimized .compose-header {
+      border-bottom: none;
+    }
+
+    .compose-container.maximized {
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: 100vw !important;
+      max-height: 100vh !important;
+    }
+
+    /* Compose content wrapper */
+    .compose-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .field-label {
@@ -703,9 +766,13 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
   // State
   showCcBcc = false;
   isSending = false;
+  isSendingEmail = false; // Prevent auto-save during send
   autoSaveStatus = '';
   isEditingDraft = false;
   currentDraftId: string | null = null;
+  isAutoSaving = false; // Prevent concurrent auto-saves
+  isMinimized = false;
+  isMaximized = false;
 
   // Recipients
   toChips: EmailChip[] = [];
@@ -724,14 +791,17 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
   filteredCcEmails: Observable<string[]>;
   filteredBccEmails: Observable<string[]>;
 
-  // Quill configuration - simplified
+  // Quill configuration - Gmail-style toolbar
   quillModules = {
     toolbar: [
-      ['bold', 'italic', 'underline'],
-      ['blockquote', 'code-block'],
+      [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }],
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'header': [1, 2, 3, false] }],
-      ['link'],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      ['blockquote', 'code-block'],
+      ['link', 'image'],
       ['clean']
     ]
   };
@@ -1012,6 +1082,19 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Don't auto-save while sending email
+    if (this.isSending || this.isSendingEmail) {
+      console.log('Email is being sent, skipping auto-save...');
+      return;
+    }
+
+    // Prevent concurrent auto-save operations
+    if (this.isAutoSaving) {
+      console.log('Auto-save already in progress, skipping...');
+      return;
+    }
+
+    this.isAutoSaving = true;
     this.autoSaveStatus = 'Saving draft...';
 
     const draftData = {
@@ -1032,17 +1115,20 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe({
       next: (response) => {
-        // Store the draft ID for future updates
+        // Store the draft ID for future updates (only on first save)
         if (!this.currentDraftId && response.messageId) {
           this.currentDraftId = response.messageId;
+          console.log('Draft created with ID:', response.messageId);
         }
         this.autoSaveStatus = 'Draft saved';
+        this.isAutoSaving = false;
         setTimeout(() => {
           this.autoSaveStatus = '';
         }, 2000);
       },
       error: (error) => {
         this.autoSaveStatus = 'Save failed';
+        this.isAutoSaving = false;
         console.error('Auto-save failed:', error);
         setTimeout(() => {
           this.autoSaveStatus = '';
@@ -1128,7 +1214,9 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Prevent auto-save during send operation
     this.isSending = true;
+    this.isSendingEmail = true;
 
     try {
       const emailData = {
@@ -1148,6 +1236,7 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
         try {
           await firstValueFrom(this.mailService.deleteDraft(this.currentDraftId));
           console.log('Draft deleted after sending:', this.currentDraftId);
+          this.currentDraftId = null; // Clear draft ID after deletion
         } catch (error) {
           console.error('Failed to delete draft after sending:', error);
           // Don't fail the send operation if draft deletion fails
@@ -1161,6 +1250,7 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
       this.snackBar.open('Failed to send email', 'Close', { duration: 5000 });
     } finally {
       this.isSending = false;
+      this.isSendingEmail = false;
     }
   }
 
@@ -1210,6 +1300,36 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
       this.contentControl.value?.trim() ||
       this.attachments.length > 0
     );
+  }
+
+  toggleMinimize(): void {
+    this.isMinimized = !this.isMinimized;
+    if (this.isMinimized) {
+      this.isMaximized = false;
+    }
+    this.updateDialogClass();
+  }
+
+  toggleMaximize(): void {
+    this.isMaximized = !this.isMaximized;
+    if (this.isMaximized) {
+      this.isMinimized = false;
+    }
+    this.updateDialogClass();
+  }
+
+  private updateDialogClass(): void {
+    if (!this.dialogRef) return;
+
+    const overlayPane = document.querySelector('.compose-dialog');
+    if (overlayPane) {
+      overlayPane.classList.remove('maximized', 'minimized');
+      if (this.isMaximized) {
+        overlayPane.classList.add('maximized');
+      } else if (this.isMinimized) {
+        overlayPane.classList.add('minimized');
+      }
+    }
   }
 
   goBack(): void {

@@ -6,6 +6,7 @@ public class LoginResponse {
     private String refreshToken;
     private String email;
     private String message;
+    private String role;
 
     // Constructors
     public LoginResponse() {}
@@ -27,6 +28,14 @@ public class LoginResponse {
         this.refreshToken = refreshToken;
         this.email = email;
         this.message = message;
+    }
+
+    public LoginResponse(String token, String refreshToken, String email, String message, String role) {
+        this.token = token;
+        this.refreshToken = refreshToken;
+        this.email = email;
+        this.message = message;
+        this.role = role;
     }
 
     // Getters and Setters
@@ -60,5 +69,13 @@ public class LoginResponse {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

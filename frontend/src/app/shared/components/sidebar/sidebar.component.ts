@@ -13,6 +13,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LabelService, Label } from '../../../core/services/label.service';
 import { SearchService } from '../../../core/services/search.service';
 import { LabelManagementComponent } from '../label-management/label-management.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { EnhancedComposeComponent } from '../../../mail/components/enhanced-compose.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -38,7 +40,7 @@ import { LabelManagementComponent } from '../label-management/label-management.c
       </mat-toolbar>
 
       <div class="compose-section">
-        <button mat-fab color="primary" routerLink="/compose" class="compose-fab" extended>
+        <button mat-fab color="primary" (click)="openCompose()" class="compose-fab" extended>
           <mat-icon>edit</mat-icon>
           Compose
         </button>
@@ -81,6 +83,14 @@ import { LabelManagementComponent } from '../label-management/label-management.c
         </a>
 
         <mat-divider></mat-divider>
+
+        <!-- Admin Link (only for admins) -->
+        <a mat-list-item routerLink="/admin/users" routerLinkActive="active" *ngIf="isAdmin">
+          <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+          <span matListItemTitle>User Management</span>
+        </a>
+
+        <mat-divider *ngIf="isAdmin"></mat-divider>
 
         <div class="labels-header">
           <h3 matSubheader>Labels</h3>
@@ -301,15 +311,18 @@ export class SidebarComponent implements OnInit {
   labels: Label[] = [];
   loading = false;
   selectedLabelId: number | null = null;
+  isAdmin = false;
 
   constructor(
     private labelService: LabelService,
     private searchService: SearchService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
     this.loadLabels();
   }
 
@@ -333,6 +346,24 @@ export class SidebarComponent implements OnInit {
     const query = `label:"${label.name}"`;
     this.searchService.setSearchQuery(query);
     this.router.navigate(['/inbox']);
+  }
+
+  openCompose(): void {
+    const dialogRef = this.dialog.open(EnhancedComposeComponent, {
+      width: '600px',
+      height: '600px',
+      disableClose: false,
+      autoFocus: true,
+      hasBackdrop: false,
+      panelClass: 'compose-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'sent' || result === 'saved') {
+        // Email was sent or saved, you might want to refresh inbox
+        console.log('Compose dialog closed with result:', result);
+      }
+    });
   }
 
   openLabelManagement(): void {
