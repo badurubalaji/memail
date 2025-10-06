@@ -57,10 +57,24 @@ public class UserManagementService {
      * Create a new user (admin only)
      */
     @Transactional
-    public UserDTO createUser(CreateUserRequest request) {
+    public UserDTO createUser(CreateUserRequest request, String adminEmail) {
         // Check if user already exists
         if (userCredentialsRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("User with email " + request.getEmail() + " already exists");
+        }
+
+        // Domain validation: Regular admins can only create users in their own domain
+        // Super admin (admin@ashulabs.com) can create users in any domain
+        if (!isSuperAdmin(adminEmail)) {
+            String adminDomain = extractDomain(adminEmail);
+            String newUserDomain = extractDomain(request.getEmail());
+
+            if (!adminDomain.equalsIgnoreCase(newUserDomain)) {
+                throw new IllegalArgumentException(
+                    "Access denied: You can only create users in your own domain (" + adminDomain + "). " +
+                    "Cannot create user in domain: " + newUserDomain
+                );
+            }
         }
 
         // Validate password complexity
@@ -207,6 +221,32 @@ public class UserManagementService {
         return userCredentialsRepository.findByEmail(email)
                 .map(UserCredentials::isAdmin)
                 .orElse(false);
+    }
+
+    /**
+     * Check if user is super admin (can create users in any domain)
+     * Super admin is defined as admin@ashulabs.com or any user with SUPER_ADMIN role
+     */
+    private boolean isSuperAdmin(String email) {
+        // Check if it's the default super admin email
+        if ("admin@ashulabs.com".equalsIgnoreCase(email)) {
+            return true;
+        }
+
+        // Check if user has SUPER_ADMIN role
+        return userCredentialsRepository.findByEmail(email)
+                .map(user -> "SUPER_ADMIN".equals(user.getRole()))
+                .orElse(false);
+    }
+
+    /**
+     * Extract domain from email address
+     */
+    private String extractDomain(String email) {
+        if (email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("Invalid email format: " + email);
+        }
+        return email.substring(email.indexOf('@') + 1);
     }
 
     /**

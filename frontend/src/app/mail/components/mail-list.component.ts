@@ -752,10 +752,11 @@ export class MailListComponent implements OnInit, OnDestroy {
 
   private openComposeDialog(draftData: DraftData): void {
     const dialogRef = this.dialog.open(EnhancedComposeComponent, {
-      width: '90vw',
-      maxWidth: '1200px',
-      height: '80vh',
-      maxHeight: '800px',
+      width: '600px',
+      height: '600px',
+      disableClose: false,
+      autoFocus: true,
+      hasBackdrop: false,
       panelClass: 'compose-dialog',
       data: {
         mode: 'edit-draft',

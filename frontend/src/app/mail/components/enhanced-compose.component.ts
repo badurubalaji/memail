@@ -22,6 +22,8 @@ import { takeUntil, startWith, map, switchMap, catchError } from 'rxjs/operators
 import { QuillModule } from 'ngx-quill';
 
 import { MailService } from '../../core/services/mail.service';
+import { ProfileService, UserAutocomplete } from '../../core/services/profile.service';
+import 'quill-mention';
 
 interface EmailChip {
   email: string;
@@ -622,6 +624,79 @@ interface ComposeDialogData {
       color: #1a73e8 !important;
     }
 
+    /* Mention styles */
+    :host ::ng-deep .mention {
+      background: #e8f0fe;
+      color: #1a73e8;
+      padding: 2px 6px;
+      border-radius: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-block;
+      margin: 0 2px;
+      text-decoration: none;
+    }
+
+    :host ::ng-deep .mention:hover {
+      background: #d3e3fd;
+    }
+
+    :host ::ng-deep .ql-mention-list-container {
+      background: white;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 10000;
+      min-width: 300px;
+    }
+
+    :host ::ng-deep .ql-mention-list {
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+    }
+
+    :host ::ng-deep .ql-mention-list-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s;
+    }
+
+    :host ::ng-deep .ql-mention-list-item:hover,
+    :host ::ng-deep .ql-mention-list-item.selected {
+      background: #f1f3f4;
+    }
+
+    :host ::ng-deep .mention-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    :host ::ng-deep .mention-item mat-icon {
+      color: #5f6368;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    :host ::ng-deep .mention-name {
+      font-weight: 500;
+      color: #202124;
+      flex: 1;
+    }
+
+    :host ::ng-deep .mention-email {
+      font-size: 12px;
+      color: #5f6368;
+    }
+
     /* Footer */
     .compose-footer {
       background: white;
@@ -791,8 +866,8 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
   filteredCcEmails: Observable<string[]>;
   filteredBccEmails: Observable<string[]>;
 
-  // Quill configuration - Gmail-style toolbar
-  quillModules = {
+  // Quill configuration - Gmail-style toolbar with mention support
+  quillModules: any = {
     toolbar: [
       [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
       ['bold', 'italic', 'underline', 'strike'],
@@ -803,7 +878,48 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
       ['blockquote', 'code-block'],
       ['link', 'image'],
       ['clean']
-    ]
+    ],
+    mention: {
+      allowedChars: /^[A-Za-z\sÅÄÖåäö@._-]*$/,
+      mentionDenotationChars: ['@'],
+      source: async (searchTerm: string, renderList: Function) => {
+        try {
+          const users = await firstValueFrom(this.profileService.getUsersForAutocomplete());
+
+          const matches = users.filter((user: UserAutocomplete) => {
+            const search = searchTerm.toLowerCase();
+            return user.email.toLowerCase().includes(search) ||
+                   user.displayName.toLowerCase().includes(search);
+          });
+
+          const items = matches.map((user: UserAutocomplete) => ({
+            id: user.email,
+            value: user.displayName,
+            email: user.email,
+            displayName: user.displayName
+          }));
+
+          renderList(items, searchTerm);
+        } catch (error) {
+          console.error('Error fetching users for mention:', error);
+          renderList([], searchTerm);
+        }
+      },
+      onSelect: (item: any, insertItem: Function) => {
+        // Add the mentioned email to recipients if not already present
+        this.addMentionedEmailToRecipients(item.email);
+
+        // Insert the mention into the editor
+        insertItem(item);
+      },
+      renderItem: (item: any) => {
+        return `<span class="mention-item">
+                  <mat-icon>person</mat-icon>
+                  <span class="mention-name">${item.displayName}</span>
+                  <span class="mention-email">${item.email}</span>
+                </span>`;
+      }
+    }
   };
 
   editorStyles = {
@@ -815,6 +931,7 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private mailService: MailService,
+    private profileService: ProfileService,
     private router: Router,
     private snackBar: MatSnackBar,
     @Optional() private dialogRef?: MatDialogRef<EnhancedComposeComponent>,
@@ -1001,6 +1118,17 @@ export class EnhancedComposeComponent implements OnInit, OnDestroy {
   selectBccEmail(event: { option: { value: string } }): void {
     this.bccChips.push(this.createEmailChip(event.option.value));
     this.bccInputControl.setValue('');
+  }
+
+  // Add mentioned email from editor to recipients
+  addMentionedEmailToRecipients(email: string): void {
+    // Check if email already exists in To recipients
+    const emailExists = this.toChips.some(chip => chip.email.toLowerCase() === email.toLowerCase());
+
+    if (!emailExists) {
+      this.toChips.push(this.createEmailChip(email));
+      console.log('Added mentioned email to recipients:', email);
+    }
   }
 
   toggleCcBcc(): void {

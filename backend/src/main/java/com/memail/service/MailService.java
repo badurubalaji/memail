@@ -2052,13 +2052,10 @@ public class MailService {
                 }
             }
 
-            // Expunge all deleted messages at once
-            if (deletedCount > 0) {
-                draftsFolder.expunge();
-                System.out.println("Bulk deleted " + deletedCount + " drafts");
-            }
+            // Close folder with expunge to permanently delete marked messages
+            draftsFolder.close(true); // true = expunge deleted messages
 
-            draftsFolder.close(false);
+            System.out.println("Bulk deleted " + deletedCount + " drafts");
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to bulk delete drafts: " + e.getMessage(), e);

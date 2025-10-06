@@ -84,7 +84,7 @@ public class AdminController {
                         .body(Map.of("error", "Access denied", "message", "Admin access required"));
             }
 
-            UserDTO user = userManagementService.createUser(request);
+            UserDTO user = userManagementService.createUser(request, adminEmail);
             auditLogService.logUserCreated(adminEmail, request.getEmail(), true);
             return ResponseEntity.ok(user);
         } catch (IllegalArgumentException e) {
